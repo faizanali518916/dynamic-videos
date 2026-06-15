@@ -1,4 +1,4 @@
-# Remotion video
+# Dynamic infographic Remotion template
 
 <p align="center">
   <a href="https://github.com/remotion-dev/logo">
@@ -9,7 +9,10 @@
   </a>
 </p>
 
-Welcome to your Remotion project!
+This project renders a portrait infographic video from `src/template.json`.
+Use the `TemplateBuilder` composition in Remotion Studio to build or reorder
+segments, copy the generated JSON, paste it into `src/template.json`, then
+preview or render the `InfographicVideo` composition.
 
 ## Commands
 
@@ -28,8 +31,28 @@ npm run dev
 **Render video**
 
 ```console
-npx remotion render
+npm run render
 ```
+
+**Render a preview still**
+
+```console
+npm run still
+```
+
+**Build the standalone JSON builder page**
+
+```console
+npm run build:builder
+```
+
+Then open `public/template-builder.html` in a browser.
+
+The render target is 1080 x 1920 at 30 fps. Segment duration is fixed by layout
+type in `src/layoutCatalog.ts`. Rendering is configured to use the installed
+Chrome executable at `C:\Program Files\Google\Chrome\Application\chrome.exe`.
+
+Brand defaults are documented in `BRAND_GUIDELINES.md` and mirrored in `src/brand.ts`.
 
 **Upgrade Remotion**
 

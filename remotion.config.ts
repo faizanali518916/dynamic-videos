@@ -6,8 +6,7 @@
  */
 
 import { Config } from "@remotion/cli/config";
-import { enableTailwind } from '@remotion/tailwind-v4';
 
+Config.setBrowserExecutable("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
-Config.overrideWebpackConfig(enableTailwind);

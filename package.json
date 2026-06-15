@@ -22,8 +22,11 @@
     "typescript": "5.9.3"
   },
   "scripts": {
-    "dev": "remotion studio",
-    "build": "remotion bundle",
+    "dev": "node ./node_modules/@remotion/cli/remotion-cli.js studio src/index.ts",
+    "render": "node ./node_modules/@remotion/cli/remotion-cli.js render src/index.ts InfographicVideo out/infographic.mp4",
+    "still": "node ./node_modules/@remotion/cli/remotion-cli.js still src/index.ts InfographicVideo out/preview.png --frame=35",
+    "build:builder": "node scripts/build-template-builder.mjs",
+    "build": "node ./node_modules/@remotion/cli/remotion-cli.js bundle src/index.ts",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
   },

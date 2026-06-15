@@ -1,3 +1,1 @@
-export const MyComposition = () => {
-  return null;
-};
+export { InfographicVideo, InfographicVideo as MyComposition } from "./video/InfographicVideo";
