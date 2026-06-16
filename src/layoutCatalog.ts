@@ -4,7 +4,7 @@ export const VIDEO_WIDTH = 1080;
 export const VIDEO_HEIGHT = 1920;
 export const FPS = 30;
 export const INTRO_DURATION_SECONDS = 4;
-export const OUTRO_DURATION_SECONDS = 5;
+export const OUTRO_DURATION_SECONDS = 8;
 
 export type LayoutKind =
   | "flowchart"

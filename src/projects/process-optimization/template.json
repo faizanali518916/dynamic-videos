@@ -1,9 +1,9 @@
 {
-  "title": "Operating System For Modern Growth",
-  "intro": true,
+  "title": "Process Optimization For Modern Growth",
+  "intro": false,
   "outro": true,
-  "videoBased": false,
-  "caption": false,
+  "videoBased": true,
+  "caption": true,
   "theme": {
     "background": "#131532",
     "surface": "#1b1e46",
@@ -14,25 +14,60 @@
     "text": "#f7f8ff",
     "muted": "#c9cdfd"
   },
-  "hookText": "Testing",
   "segments": [
     {
+      "videoShown": true,
+      "durationSeconds": 9
+    },
+    {
       "videoShown": false,
-      "layout": "radial",
-      "title": "Some points",
+      "layout": "flowchart",
+      "title": "The failure is operational",
       "durationSeconds": 6,
-      "subtitle": "Testing 1",
-      "body": "Wow, so cool",
-      "metric": "Testing 2",
-      "footnote": "Also so cool",
+      "subtitle": "The product and the market are not the whole story.",
+      "body": "The real problem sits underneath the operations.",
+      "items": ["Product", "Market", "Operations", "Bottlenecks", "Scale"]
+    },
+    {
+      "videoShown": true,
+      "durationSeconds": 8
+    },
+    {
+      "videoShown": false,
+      "layout": "process",
+      "title": "Process optimization is fixing how you work",
+      "durationSeconds": 8,
+      "subtitle": "Map the work, remove the drag, then automate the best practice.",
+      "body": "We map the process, find the bottlenecks, identify repetitive costs, and then automate the best practice.",
       "items": [
-        "First point",
-        "Second point",
-        "Third point",
-        "Fourth point",
-        "Fifth point"
-      ],
-      "values": [50, 60, 70, 80, 90]
+        "Map the process",
+        "Find the bottlenecks",
+        "Identify repetitive costs",
+        "Automate the best practice"
+      ]
+    },
+    {
+      "videoShown": true,
+      "durationSeconds": 10
+    },
+    {
+      "videoShown": false,
+      "layout": "roadmap",
+      "title": "Scale with accuracy",
+      "durationSeconds": 9,
+      "subtitle": "Fix the operating system before you scale the business.",
+      "body": "When the process is clean, scaling becomes more accurate and less fragile.",
+      "items": [
+        "Map the process",
+        "Fix the bottlenecks",
+        "Automate best practice",
+        "Scale with accuracy",
+        "Claim the free audit"
+      ]
+    },
+    {
+      "videoShown": true,
+      "durationSeconds": 24
     }
   ]
 }

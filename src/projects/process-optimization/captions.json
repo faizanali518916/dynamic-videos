@@ -126,7 +126,7 @@
     "confidence": 0.894649
   },
   {
-    "text": " mass",
+    "text": " mess",
     "startMs": 6040,
     "endMs": 6360,
     "timestampMs": 6380,
@@ -182,14 +182,14 @@
     "confidence": 0.996557
   },
   {
-    "text": " into",
+    "text": " in",
     "startMs": 9660,
     "endMs": 9910,
     "timestampMs": 9240,
     "confidence": 0.531214
   },
   {
-    "text": " the",
+    "text": " today's",
     "startMs": 9910,
     "endMs": 10100,
     "timestampMs": 9420,
@@ -336,7 +336,7 @@
     "confidence": 0.965816
   },
   {
-    "text": " back",
+    "text": " bad",
     "startMs": 16780,
     "endMs": 17110,
     "timestampMs": 17060,
@@ -497,7 +497,7 @@
     "confidence": 0.975863
   },
   {
-    "text": " mass",
+    "text": " mess",
     "startMs": 25680,
     "endMs": 26000,
     "timestampMs": 26340,
@@ -910,7 +910,7 @@
     "confidence": 0.849995
   },
   {
-    "text": " SPCtech",
+    "text": " SPCTEK",
     "startMs": 50880,
     "endMs": 51440,
     "timestampMs": 51580,
@@ -1239,7 +1239,7 @@
     "confidence": 0.92167
   },
   {
-    "text": " words",
+    "text": " what's",
     "startMs": 68540,
     "endMs": 68840,
     "timestampMs": 68820,
@@ -1328,19 +1328,5 @@
     "endMs": 72760,
     "timestampMs": 72740,
     "confidence": 0.886746
-  },
-  {
-    "text": " (upbeat",
-    "startMs": 72760,
-    "endMs": 73830,
-    "timestampMs": 73460,
-    "confidence": 0.221604
-  },
-  {
-    "text": " music)",
-    "startMs": 73830,
-    "endMs": 75340,
-    "timestampMs": 73460,
-    "confidence": 0.86206
   }
 ]

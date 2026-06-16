@@ -29,6 +29,7 @@
     "still": "node ./node_modules/@remotion/cli/remotion-cli.js still src/index.ts InfographicVideo out/preview.png --frame=35",
     "build:builder": "node scripts/build-template-builder.mjs",
     "build": "node ./node_modules/@remotion/cli/remotion-cli.js bundle src/index.ts",
+    "transcript": "node ./scripts/print-project-transcript.mjs",
     "caption": "node ./scripts/generate-project-captions.mjs",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
