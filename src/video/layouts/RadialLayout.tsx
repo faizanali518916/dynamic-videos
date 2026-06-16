@@ -15,7 +15,7 @@ export const RadialLayout = ({
   segment,
   theme,
 }: LayoutProps) => {
-  const items = ensureItems(segment, 6);
+  const items = ensureItems(segment);
 
   const radius = 326;
 

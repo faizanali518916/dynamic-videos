@@ -17,7 +17,7 @@ export const RoadmapLayout = ({
   segment,
   theme,
 }: LayoutProps) => {
-  const items = ensureItems(segment, 5);
+  const items = ensureItems(segment);
 
   return (
     <div style={{ position: "relative", width: "100%" }}>

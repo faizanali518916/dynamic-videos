@@ -10,7 +10,11 @@ import { BuilderHeader } from "./builder/BuilderHeader";
 import { JsonPanel } from "./builder/JsonPanel";
 import { SegmentEditor } from "./builder/SegmentEditor";
 import { ThemeEditor } from "./builder/ThemeEditor";
-import { newSegment, toFormSegment, toTemplate } from "./builder/templateMapper";
+import {
+  newSegment,
+  toFormSegment,
+  toTemplate,
+} from "./builder/templateMapper";
 import type { FormSegment } from "./builder/types";
 
 type TemplateBuilderAppProps = {
@@ -21,18 +25,40 @@ export const TemplateBuilderApp = ({
   initialTemplate,
 }: TemplateBuilderAppProps) => {
   const [title, setTitle] = useState(initialTemplate.title);
+  const [hookText, setHookText] = useState(initialTemplate.hookText ?? "");
+  const [intro, setIntro] = useState(initialTemplate.intro === true);
+  const [outro, setOutro] = useState(initialTemplate.outro === true);
+  const [videoBased, setVideoBased] = useState(
+    initialTemplate.videoBased === true,
+  );
+  const [caption, setCaption] = useState(
+    initialTemplate.videoBased === true && initialTemplate.caption === true,
+  );
   const [theme, setTheme] = useState<Theme>({
     ...defaultTheme,
     ...initialTemplate.theme,
   });
   const [segments, setSegments] = useState<FormSegment[]>(
-    initialTemplate.segments.map(toFormSegment),
+    initialTemplate.segments.map((segment) => ({
+      ...toFormSegment(segment),
+      videoShown: initialTemplate.videoBased === true && segment.videoShown === true,
+    })),
   );
   const [copied, setCopied] = useState(false);
 
   const template = useMemo(
-    () => toTemplate(title, theme, segments),
-    [title, theme, segments],
+    () =>
+      toTemplate(
+        title,
+        hookText,
+        intro,
+        outro,
+        caption,
+        theme,
+        videoBased,
+        segments,
+      ),
+    [title, hookText, intro, outro, caption, theme, videoBased, segments],
   );
   const json = useMemo(() => JSON.stringify(template, null, 2), [template]);
 
@@ -47,20 +73,32 @@ export const TemplateBuilderApp = ({
   const updateSegment = (
     index: number,
     key: keyof FormSegment,
-    value: string,
+    value: FormSegment[keyof FormSegment],
   ) => {
     setSegments((current) =>
-      current.map((segment, segmentIndex) =>
-        segmentIndex === index
-          ? {
-              ...segment,
-              [key]: value,
-              ...(key === "layout" && !segment.title.trim()
-                ? { title: LAYOUT_SPECS[value as LayoutKind].label }
-                : {}),
-            }
-          : segment,
-      ),
+      current.map((segment, segmentIndex) => {
+        if (segmentIndex !== index) {
+          return segment;
+        }
+
+        if (key === "layout") {
+          const layout = String(value) as LayoutKind;
+
+          return {
+            ...segment,
+            layout,
+            durationSeconds: String(LAYOUT_SPECS[layout].durationSeconds),
+            ...(!segment.title.trim()
+              ? { title: LAYOUT_SPECS[layout].label }
+              : {}),
+          };
+        }
+
+        return {
+          ...segment,
+          [key]: value,
+        };
+      }),
     );
     setCopied(false);
   };
@@ -119,21 +157,114 @@ export const TemplateBuilderApp = ({
     setCopied(false);
   };
 
+  const handleHookTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setHookText(event.target.value);
+    setCopied(false);
+  };
+
+  const handleIntroChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setIntro(event.target.checked);
+    setCopied(false);
+  };
+
+  const handleOutroChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setOutro(event.target.checked);
+    setCopied(false);
+  };
+
+  const handleVideoBasedChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextVideoBased = event.target.checked;
+
+    setVideoBased(nextVideoBased);
+    if (!nextVideoBased) {
+      setCaption(false);
+      setSegments((current) =>
+        current.map((segment) => ({
+          ...segment,
+          videoShown: false,
+        })),
+      );
+    }
+    setCopied(false);
+  };
+
+  const handleCaptionChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCaption(event.target.checked);
+    setCopied(false);
+  };
+
   return (
     <form className="builder-grid" onSubmit={handleSubmit}>
       <section className="builder-main">
         <BuilderHeader copied={copied} />
 
-        <label className="builder-field">
-          <span>Template title</span>
-          <input onChange={handleTitleChange} type="text" value={title} />
-        </label>
+        <div className="builder-settings">
+          <div className="builder-toggle-grid">
+            <label className="builder-field builder-toggle">
+              <input
+                checked={intro}
+                onChange={handleIntroChange}
+                type="checkbox"
+              />
+              <span>Intro</span>
+            </label>
+
+            <label className="builder-field builder-toggle">
+              <input
+                checked={videoBased}
+                onChange={handleVideoBasedChange}
+                type="checkbox"
+              />
+              <span>Video</span>
+            </label>
+
+            <label className="builder-field builder-toggle">
+              <input
+                checked={outro}
+                onChange={handleOutroChange}
+                type="checkbox"
+              />
+              <span>Outro</span>
+            </label>
+
+            <label className="builder-field builder-toggle">
+              <input
+                checked={caption}
+                disabled={!videoBased}
+                onChange={handleCaptionChange}
+                type="checkbox"
+              />
+              <span>Caption</span>
+            </label>
+          </div>
+
+          <label className={`builder-field ${intro ? "" : "title-field-wide"}`}>
+            <span>Template title</span>
+            <input onChange={handleTitleChange} type="text" value={title} />
+          </label>
+
+          {intro ? (
+            <label className="builder-field hook-field">
+              <span>Hook text</span>
+              <input
+                onChange={handleHookTextChange}
+                required
+                type="text"
+                value={hookText}
+              />
+            </label>
+          ) : null}
+        </div>
 
         <ThemeEditor onChange={updateTheme} theme={theme} />
 
         <div className="segments-header">
           <h2>Segments</h2>
-          <button className="builder-secondary" onClick={addSegment} type="button">
+          <button
+            className="builder-secondary"
+            onClick={addSegment}
+            type="button"
+          >
             Add segment
           </button>
         </div>
@@ -142,7 +273,7 @@ export const TemplateBuilderApp = ({
           {segments.map((segment, index) => (
             <SegmentEditor
               index={index}
-              key={`${segment.layout}-${index}`}
+              key={`${segment.videoShown ? "video" : segment.layout}-${index}`}
               onDuplicate={duplicateSegment}
               onMove={moveSegment}
               onRemove={removeSegment}
@@ -150,6 +281,7 @@ export const TemplateBuilderApp = ({
               segment={segment}
               segmentCount={segments.length}
               theme={theme}
+              videoBased={videoBased}
             />
           ))}
         </div>

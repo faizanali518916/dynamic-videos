@@ -35,15 +35,19 @@ body {
 }
 .builder-grid {
   display: grid;
-  gap: 28px;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 36px;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 440px);
   height: 100%;
-  padding: 46px;
+  padding: 54px;
 }
 .builder-main,
 .json-panel {
   min-height: 0;
   overflow: auto;
+}
+.builder-main {
+  padding-right: 18px;
+  scrollbar-gutter: stable;
 }
 .builder-topbar,
 .segments-header,
@@ -75,13 +79,27 @@ body {
     ui-sans-serif,
     system-ui,
     sans-serif;
-  font-size: 42px;
+  font-size: 50px;
   line-height: 1;
   margin-top: 10px;
 }
-.segments-header,
+.builder-settings {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 260px minmax(0, 1fr) minmax(0, 1fr);
+  margin-top: 30px;
+}
+.builder-toggle-grid {
+  display: grid;
+  gap: 14px 24px;
+  grid-template-columns: repeat(2, max-content);
+}
+.segments-header {
+  margin-bottom: 16px;
+  margin-top: 22px;
+}
 .json-panel-head {
-  margin-top: 26px;
+  margin-top: 0;
 }
 .segments-header h2,
 .json-panel h2 {
@@ -91,7 +109,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 22px;
+}
+.builder-settings .builder-field {
+  margin-top: 0;
 }
 .builder-field span {
   color: #c9cdfd;
@@ -104,15 +125,15 @@ body {
 .builder-field select,
 .builder-field textarea,
 .json-panel textarea {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(160, 166, 252, 0.22);
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(160, 166, 252, 0.26);
   border-radius: 8px;
   color: #f7f8ff;
   font: inherit;
   font-size: 18px;
   line-height: 1.35;
   outline: none;
-  padding: 13px 14px;
+  padding: 14px 16px;
   width: 100%;
 }
 .builder-field textarea,
@@ -123,25 +144,44 @@ body {
   height: 50px;
   padding: 4px;
 }
+.builder-toggle {
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
+}
+.builder-toggle input[type=checkbox] {
+  cursor: pointer;
+  flex: 0 0 auto;
+  height: 24px;
+  width: 24px;
+}
+.builder-toggle input[type=checkbox]:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+.title-field-wide {
+  grid-column: span 2;
+}
 .theme-grid {
   display: grid;
-  gap: 12px;
+  gap: 14px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .color-field {
-  margin-top: 16px;
+  margin-top: 18px;
 }
 .segments-list {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding-bottom: 24px;
+  gap: 24px;
+  padding-bottom: 34px;
 }
 .segment-editor {
   background: rgba(27, 30, 70, 0.92);
-  border: 1px solid rgba(160, 166, 252, 0.18);
+  border: 1px solid rgba(160, 166, 252, 0.22);
   border-radius: 8px;
-  padding: 20px;
+  padding: 24px;
 }
 .segment-toolbar {
   gap: 16px;
@@ -157,7 +197,7 @@ body {
 }
 .segment-fields {
   display: grid;
-  gap: 0 14px;
+  gap: 2px 18px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .wide {
@@ -191,11 +231,11 @@ body {
 }
 .json-panel {
   background: rgba(27, 30, 70, 0.94);
-  border: 1px solid rgba(160, 166, 252, 0.18);
+  border: 1px solid rgba(160, 166, 252, 0.22);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  padding: 18px;
+  padding: 24px;
 }
 .json-panel-head {
   flex: 0 0 auto;
@@ -208,8 +248,8 @@ body {
     "Fira Code",
     Consolas,
     monospace;
-  font-size: 13px;
-  margin-top: 14px;
+  font-size: 14px;
+  margin-top: 18px;
   min-height: 0;
   white-space: pre;
 }

@@ -1,14 +1,33 @@
 import { GlowCard } from "../primitives/GlowCard";
 import { HighlightTag } from "../primitives/HighlightTag";
 import type { LayoutProps } from "../types";
-import { ensureItems, enterStyle, headingTextStyle, reveal, vividGradient, withAlpha } from "../utils";
+import {
+  ensureItems,
+  enterStyle,
+  headingTextStyle,
+  reveal,
+  vividGradient,
+  withAlpha,
+} from "../utils";
 
-export const MatrixLayout = ({ accent, frame, segment, theme }: LayoutProps) => {
-  const items = ensureItems(segment, 4);
+export const MatrixLayout = ({
+  accent,
+  frame,
+  segment,
+  theme,
+}: LayoutProps) => {
+  const items = ensureItems(segment);
   const labels = ["Pop", "Push", "Build", "Hold"];
 
   return (
-    <div style={{ display: "grid", gap: 18, gridTemplateColumns: "1fr 1fr", width: "100%" }}>
+    <div
+      style={{
+        display: "grid",
+        gap: 18,
+        gridTemplateColumns: "1fr 1fr",
+        width: "100%",
+      }}
+    >
       {items.map((item, itemIndex) => (
         <GlowCard
           accent={accent}

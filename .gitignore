@@ -7,3 +7,7 @@ remotion-studio*.log
 
 # Ignore the output video from Git but not videos you import into src/.
 out
+
+# Ignore large audio and video files
+audio.wav
+video.mp4

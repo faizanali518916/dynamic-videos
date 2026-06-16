@@ -1,13 +1,31 @@
 import { Arrow } from "../primitives/Arrow";
 import { GlowCard } from "../primitives/GlowCard";
 import type { LayoutProps } from "../types";
-import { ensureItems, enterStyle, headingTextStyle, reveal, vividGradient } from "../utils";
+import {
+  ensureItems,
+  enterStyle,
+  headingTextStyle,
+  reveal,
+  vividGradient,
+} from "../utils";
 
-export const ProcessLayout = ({ accent, frame, segment, theme }: LayoutProps) => {
-  const items = ensureItems(segment, 5);
+export const ProcessLayout = ({
+  accent,
+  frame,
+  segment,
+  theme,
+}: LayoutProps) => {
+  const items = ensureItems(segment);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "100%" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 20,
+        width: "100%",
+      }}
+    >
       {items.map((item, itemIndex) => (
         <GlowCard
           accent={accent}
@@ -52,7 +70,11 @@ export const ProcessLayout = ({ accent, frame, segment, theme }: LayoutProps) =>
           >
             {item}
           </div>
-          <Arrow accent={accent} opacity={reveal(frame, itemIndex + 1)} style={{ alignSelf: "center" }} />
+          <Arrow
+            accent={accent}
+            opacity={reveal(frame, itemIndex + 1)}
+            style={{ alignSelf: "center" }}
+          />
         </GlowCard>
       ))}
     </div>

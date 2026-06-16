@@ -8,7 +8,12 @@ type ArrowProps = {
   style?: CSSProperties;
 };
 
-export const Arrow = ({ accent, opacity = 1, rotate = 0, style }: ArrowProps) => (
+export const Arrow = ({
+  accent,
+  opacity = 1,
+  rotate = 0,
+  style,
+}: ArrowProps) => (
   <div
     style={{
       alignItems: "center",

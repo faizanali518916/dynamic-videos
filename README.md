@@ -9,10 +9,58 @@
   </a>
 </p>
 
-This project renders a portrait infographic video from `src/template.json`.
+This project renders a portrait infographic video from a project folder under
+`src/projects`.
 Use the `TemplateBuilder` composition in Remotion Studio to build or reorder
-segments, copy the generated JSON, paste it into `src/template.json`, then
-preview or render the `InfographicVideo` composition.
+segments, copy the generated JSON, paste it into the active project's
+`template.json`, then preview or render the `InfographicVideo` composition.
+
+Each video project lives in `src/projects/<project-name>/` and contains:
+
+- `template.json` for the Remotion template data
+- `video.mp4` for the source video
+- `transcript.json` for on-screen captions
+
+The current project is `src/projects/process-optimization/`.
+
+Each segment in `template.json` can set `durationSeconds` to control how long
+that layout stays on screen. The renderer clamps the value to the selected
+layout's supported duration range, with a minimum animation-safe duration of
+3 seconds. Layout item counts are also bounded per layout, so flexible layouts
+can render different numbers of items while fixed layouts keep their required
+count.
+
+Templates can also be source-video based:
+
+```json
+{
+  "title": "Operating System For Modern Growth",
+  "videoBased": true,
+  "intro": true,
+  "outro": true,
+  "caption": true,
+  "hookText": "What if your growth system could make cleaner decisions faster?",
+  "segments": [
+    { "videoShown": true, "durationSeconds": 4 },
+    {
+      "videoShown": false,
+      "layout": "flowchart",
+      "durationSeconds": 5,
+      "title": "From signal to shipped decision",
+      "items": ["Market signal", "Research brief", "Priority stack"]
+    }
+  ]
+}
+```
+
+When `videoBased` is true, `video.mp4` runs continuously as the audio bed.
+Scenes with `videoShown: true` show the source video and only need
+`durationSeconds`; scenes with `videoShown: false` hide the source video and
+render the animation layout while the source audio keeps playing.
+
+When `intro` is true, the render starts with a short hook scene using
+`hookText`. When `outro` is true, the render ends with `public/outro.mp4`.
+`caption` can only be enabled when `videoBased` is true.
 
 ## Commands
 

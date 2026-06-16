@@ -1,1 +1,4 @@
-export { InfographicVideo, InfographicVideo as MyComposition } from "./video/InfographicVideo";
+export {
+  InfographicVideo,
+  InfographicVideo as MyComposition,
+} from "./video/InfographicVideo";

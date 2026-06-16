@@ -1,6 +1,11 @@
 import type { CSSProperties } from "react";
 import type { Theme } from "../../layoutCatalog";
-import { headingTextStyle, subheadingTextStyle, vividGradient, withAlpha } from "../utils";
+import {
+  headingTextStyle,
+  subheadingTextStyle,
+  vividGradient,
+  withAlpha,
+} from "../utils";
 
 type MetricBadgeProps = {
   accent: string;

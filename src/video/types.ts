@@ -1,14 +1,21 @@
 import type { CSSProperties } from "react";
-import type { InfographicSegment, InfographicTemplate, Theme } from "../layoutCatalog";
+import type { Caption } from "@remotion/captions";
+import type {
+  AnimationSegment,
+  InfographicTemplate,
+  Theme,
+} from "../layoutCatalog";
 
 export type InfographicVideoProps = {
+  captions?: Caption[];
   template: InfographicTemplate;
+  videoSrc?: string;
 };
 
 export type SegmentSceneProps = {
   durationInFrames: number;
   index: number;
-  segment: InfographicSegment;
+  segment: AnimationSegment;
   template: InfographicTemplate;
   total: number;
 };
@@ -19,7 +26,7 @@ export type LayoutProps = {
   frame: number;
   index: number;
   progress: number;
-  segment: InfographicSegment;
+  segment: AnimationSegment;
   theme: Theme;
 };
 

@@ -1,18 +1,27 @@
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  interpolate,
+  spring,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { LAYOUT_SPECS, defaultTheme } from "../layoutCatalog";
 import { SceneBackdrop } from "./scene/SceneBackdrop";
-import { SceneFooter } from "./scene/SceneFooter";
 import { SceneHeader } from "./scene/SceneHeader";
 import { renderLayout } from "./layouts/renderLayout";
 import type { SegmentSceneProps } from "./types";
-import { enterStyle, headingTextStyle, reveal, subheadingTextStyle } from "./utils";
+import {
+  enterStyle,
+  headingTextStyle,
+  reveal,
+  subheadingTextStyle,
+} from "./utils";
 
 export const SegmentScene = ({
   durationInFrames,
   index,
   segment,
   template,
-  total,
 }: SegmentSceneProps) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -47,18 +56,16 @@ export const SegmentScene = ({
         padding: "82px 74px 70px",
       }}
     >
-      <SceneBackdrop accent={accent} frame={frame} progress={intro} theme={theme} />
-      <SceneHeader
+      <SceneBackdrop
         accent={accent}
-        index={index}
-        segment={segment}
-        template={template}
+        frame={frame}
+        progress={intro}
         theme={theme}
-        total={total}
       />
+      <SceneHeader theme={theme} />
       <section
         style={{
-          marginTop: 44,
+          marginTop: 76,
           position: "relative",
           zIndex: 2,
           ...enterStyle(reveal(frame), 18),
@@ -126,8 +133,6 @@ export const SegmentScene = ({
           theme,
         })}
       </main>
-
-      <SceneFooter />
     </AbsoluteFill>
   );
 };

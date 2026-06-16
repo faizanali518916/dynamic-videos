@@ -21727,9 +21727,13 @@
   var import_react2 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
-  // src/template.json
+  // src/projects/process-optimization/template.json
   var template_default = {
     title: "Operating System For Modern Growth",
+    intro: true,
+    outro: true,
+    videoBased: false,
+    caption: false,
     theme: {
       background: "#131532",
       surface: "#1b1e46",
@@ -21740,124 +21744,25 @@
       text: "#f7f8ff",
       muted: "#c9cdfd"
     },
+    hookText: "Testing",
     segments: [
       {
-        layout: "flowchart",
-        title: "From signal to shipped decision",
-        subtitle: "A clean executive loop for recurring planning cycles",
-        body: "Each step can be rewritten in this JSON file without touching the Remotion component.",
-        items: [
-          "Market signal",
-          "Research brief",
-          "Priority stack",
-          "Execution lane",
-          "Measured result"
-        ],
-        metric: "7 steps",
-        footnote: "Fixed duration: 5 seconds"
-      },
-      {
-        layout: "barGraph",
-        title: "Channel momentum",
-        subtitle: "Relative contribution across the quarter",
-        items: ["Organic", "Paid", "Partner", "Lifecycle", "Sales"],
-        values: [82, 64, 48, 72, 56],
-        metric: "+28%",
-        footnote: "Fixed duration: 6 seconds"
-      },
-      {
-        layout: "timeline",
-        title: "Launch cadence",
-        subtitle: "Five milestones arranged for a portrait canvas",
-        items: [
-          "Insight lock",
-          "Creative sprint",
-          "Pilot group",
-          "Public launch",
-          "Optimization"
-        ],
-        metric: "12 weeks"
-      },
-      {
-        layout: "comparison",
-        title: "Before and after operating model",
-        subtitle: "Use paired bullets for side-by-side contrast",
-        items: [
-          "Manual briefs",
-          "Scattered reviews",
-          "Slow approvals",
-          "Structured intake",
-          "Live status",
-          "Clear owners"
-        ],
-        metric: "2 modes"
-      },
-      {
+        videoShown: false,
         layout: "radial",
-        title: "Customer value wheel",
-        subtitle: "A central metric surrounded by supporting proof points",
-        items: ["Speed", "Trust", "Clarity", "Reach", "Retention", "Quality"],
-        metric: "91%",
-        body: "The radial layout works well for ecosystems, capability maps, and stakeholder views."
-      },
-      {
-        layout: "matrix",
-        title: "Decision matrix",
-        subtitle: "Four options mapped into a crisp 2 x 2 frame",
-        items: ["High impact", "Low effort", "Strategic bet", "Watch list"],
-        metric: "4 zones"
-      },
-      {
-        layout: "stats",
-        title: "Executive scorecard",
-        subtitle: "A metric-led slide for quick status reads",
-        items: ["Pipeline health", "Cycle time", "Retention", "Activation"],
-        values: [76, 41, 88, 69],
-        metric: "84%",
-        footnote: "Swap labels and values in template.json"
-      },
-      {
-        layout: "process",
-        title: "Production workflow",
-        subtitle: "Numbered steps with enough room for operational copy",
-        items: ["Intake", "Storyboard", "Build", "Review", "Render"],
-        metric: "30 fps"
-      },
-      {
-        layout: "pyramid",
-        title: "Priority pyramid",
-        subtitle: "Stack strategy from narrow focus to broad execution",
-        items: ["Vision", "Narrative", "Systems", "Channels", "Measurement"],
-        metric: "5 tiers"
-      },
-      {
-        layout: "roadmap",
-        title: "Roadmap path",
-        subtitle: "A stitched path for releases, campaigns, or transformation programs",
-        items: ["Now", "Next", "Pilot", "Scale", "Optimize"],
-        metric: "Q1-Q4"
-      },
-      {
-        layout: "hierarchy",
-        title: "Team structure",
-        subtitle: "Show ownership and dependencies in a compact tree",
+        title: "Some points",
+        durationSeconds: 6,
+        subtitle: "Testing 1",
+        body: "Wow, so cool",
+        metric: "Testing 2",
+        footnote: "Also so cool",
         items: [
-          "Growth lead",
-          "Content",
-          "Product",
-          "Revenue",
-          "Research",
-          "Design",
-          "Analytics"
+          "First point",
+          "Second point",
+          "Third point",
+          "Fourth point",
+          "Fifth point"
         ],
-        metric: "7 roles"
-      },
-      {
-        layout: "quadrant",
-        title: "Opportunity map",
-        subtitle: "Sort initiatives by value and effort",
-        items: ["Quick wins", "Big bets", "Maintenance", "Defer"],
-        metric: "Value x effort"
+        values: [50, 60, 70, 80, 90]
       }
     ]
   };
@@ -21876,6 +21781,9 @@
   };
 
   // src/layoutCatalog.ts
+  var DEFAULT_VIDEO_SCENE_DURATION_SECONDS = 5;
+  var MIN_VIDEO_SCENE_DURATION_SECONDS = 0.25;
+  var MAX_VIDEO_SCENE_DURATION_SECONDS = 600;
   var defaultTheme = {
     background: BRAND_COLORS.dark,
     surface: BRAND_COLORS.surface,
@@ -21890,73 +21798,139 @@
     flowchart: {
       label: "Flowchart",
       durationSeconds: 5,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 12,
+      minItems: 3,
+      maxItems: 6,
       recommendedItems: 5
     },
     barGraph: {
       label: "Bar graph",
       durationSeconds: 6,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 12,
+      minItems: 3,
+      maxItems: 7,
       recommendedItems: 5
     },
     timeline: {
       label: "Timeline",
       durationSeconds: 6,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 12,
+      minItems: 3,
+      maxItems: 6,
       recommendedItems: 5
     },
     comparison: {
       label: "Comparison",
       durationSeconds: 5,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 12,
+      minItems: 4,
+      maxItems: 8,
       recommendedItems: 6
     },
     radial: {
       label: "Radial map",
       durationSeconds: 6,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 14,
+      minItems: 4,
+      maxItems: 8,
       recommendedItems: 6
     },
     matrix: {
       label: "Matrix",
       durationSeconds: 5,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 10,
+      minItems: 4,
+      maxItems: 4,
       recommendedItems: 4
     },
     stats: {
       label: "Stats stack",
       durationSeconds: 5,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 12,
+      minItems: 2,
+      maxItems: 6,
       recommendedItems: 4
     },
     process: {
       label: "Process",
       durationSeconds: 6,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 14,
+      minItems: 3,
+      maxItems: 7,
       recommendedItems: 5
     },
     pyramid: {
       label: "Pyramid",
       durationSeconds: 5,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 12,
+      minItems: 3,
+      maxItems: 6,
       recommendedItems: 5
     },
     roadmap: {
       label: "Roadmap",
       durationSeconds: 6,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 14,
+      minItems: 3,
+      maxItems: 6,
       recommendedItems: 5
     },
     hierarchy: {
       label: "Hierarchy",
       durationSeconds: 6,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 14,
+      minItems: 4,
+      maxItems: 10,
       recommendedItems: 7
     },
     quadrant: {
       label: "Quadrant",
       durationSeconds: 5,
+      minDurationSeconds: 3,
+      maxDurationSeconds: 10,
+      minItems: 4,
+      maxItems: 4,
       recommendedItems: 4
     }
   };
   var layoutKinds = Object.keys(LAYOUT_SPECS);
+  var clampNumber = (value, min, max) => Math.min(max, Math.max(min, value));
+  var isVideoShownSegment = (segment) => segment.videoShown === true;
+  var getSegmentDurationSeconds = (segment) => {
+    if (isVideoShownSegment(segment)) {
+      const requestedDuration2 = Number(segment.durationSeconds);
+      const duration2 = Number.isFinite(requestedDuration2) ? requestedDuration2 : DEFAULT_VIDEO_SCENE_DURATION_SECONDS;
+      return clampNumber(
+        duration2,
+        MIN_VIDEO_SCENE_DURATION_SECONDS,
+        MAX_VIDEO_SCENE_DURATION_SECONDS
+      );
+    }
+    const spec = LAYOUT_SPECS[segment.layout];
+    const requestedDuration = Number(segment.durationSeconds);
+    const duration = Number.isFinite(requestedDuration) ? requestedDuration : spec.durationSeconds;
+    return clampNumber(
+      duration,
+      spec.minDurationSeconds,
+      spec.maxDurationSeconds
+    );
+  };
 
   // src/builder/BuilderHeader.tsx
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var BuilderHeader = ({ copied }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "builder-topbar", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "builder-kicker", children: "1080 x 1920 / 30 fps" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "Infographic template builder" })
-    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "Template Builder" }) }),
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "builder-primary", type: "submit", children: copied ? "Copied" : "Copy JSON" })
   ] });
 
@@ -21964,7 +21938,7 @@
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var JsonPanel = ({ copied, json, onCopy }) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("aside", { className: "json-panel", children: [
     /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "json-panel-head", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h2", { children: "src/template.json" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h2", { children: "src/projects/process-optimization/template.json" }),
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "builder-secondary", onClick: onCopy, type: "button", children: copied ? "Copied" : "Copy" })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("textarea", { readOnly: true, value: json })
@@ -21972,6 +21946,14 @@
 
   // src/builder/SegmentEditor.tsx
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
+  var itemCountLabel = (layout) => {
+    const spec = LAYOUT_SPECS[layout];
+    return spec.minItems === spec.maxItems ? `${spec.minItems} items` : `${spec.minItems}-${spec.maxItems} items`;
+  };
+  var durationRangeLabel = (layout) => {
+    const spec = LAYOUT_SPECS[layout];
+    return `${spec.minDurationSeconds}-${spec.maxDurationSeconds}s`;
+  };
   var SegmentEditor = ({
     index,
     onDuplicate,
@@ -21980,136 +21962,185 @@
     onUpdate,
     segment,
     segmentCount,
-    theme
-  }) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("article", { className: "segment-editor", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "segment-toolbar", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("strong", { children: [
-        "Segment ",
-        index + 1
+    theme,
+    videoBased
+  }) => {
+    const spec = LAYOUT_SPECS[segment.layout];
+    const durationLabel = segment.videoShown ? "Duration" : `Duration (${durationRangeLabel(segment.layout)})`;
+    const minDuration = segment.videoShown ? MIN_VIDEO_SCENE_DURATION_SECONDS : spec.minDurationSeconds;
+    const maxDuration = segment.videoShown ? MAX_VIDEO_SCENE_DURATION_SECONDS : spec.maxDurationSeconds;
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("article", { className: "segment-editor", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "segment-toolbar", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("strong", { children: [
+          "Segment ",
+          index + 1
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              disabled: index === 0,
+              onClick: () => onMove(index, -1),
+              type: "button",
+              children: "Up"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "button",
+            {
+              disabled: index === segmentCount - 1,
+              onClick: () => onMove(index, 1),
+              type: "button",
+              children: "Down"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("button", { onClick: () => onDuplicate(index), type: "button", children: "Duplicate" }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("button", { onClick: () => onRemove(index), type: "button", children: "Remove" })
+        ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("button", { disabled: index === 0, onClick: () => onMove(index, -1), type: "button", children: "Up" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "button",
-          {
-            disabled: index === segmentCount - 1,
-            onClick: () => onMove(index, 1),
-            type: "button",
-            children: "Down"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("button", { onClick: () => onDuplicate(index), type: "button", children: "Duplicate" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("button", { onClick: () => onRemove(index), type: "button", children: "Remove" })
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "segment-fields", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field builder-toggle", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "input",
+            {
+              checked: segment.videoShown,
+              disabled: !videoBased,
+              onChange: (event) => onUpdate(index, "videoShown", event.target.checked),
+              type: "checkbox"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Video shown" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: durationLabel }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "input",
+            {
+              max: maxDuration,
+              min: minDuration,
+              onChange: (event) => onUpdate(index, "durationSeconds", event.target.value),
+              step: 0.25,
+              type: "number",
+              value: segment.durationSeconds
+            }
+          )
+        ] }),
+        segment.videoShown ? null : /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Layout" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "select",
+              {
+                onChange: (event) => onUpdate(index, "layout", event.target.value),
+                value: segment.layout,
+                children: layoutKinds.map((layout) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("option", { value: layout, children: [
+                  LAYOUT_SPECS[layout].label,
+                  " / ",
+                  itemCountLabel(layout),
+                  " /",
+                  " ",
+                  durationRangeLabel(layout)
+                ] }, layout))
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Accent" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "input",
+              {
+                onChange: (event) => onUpdate(index, "accent", event.target.value),
+                type: "color",
+                value: segment.accent || theme.accent
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Title" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "input",
+              {
+                onChange: (event) => onUpdate(index, "title", event.target.value),
+                type: "text",
+                value: segment.title
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Subtitle" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "input",
+              {
+                onChange: (event) => onUpdate(index, "subtitle", event.target.value),
+                type: "text",
+                value: segment.subtitle
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Metric" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "input",
+              {
+                onChange: (event) => onUpdate(index, "metric", event.target.value),
+                type: "text",
+                value: segment.metric
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Values" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "input",
+              {
+                onChange: (event) => onUpdate(index, "valuesText", event.target.value),
+                placeholder: "80, 55, 90",
+                type: "text",
+                value: segment.valuesText
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { children: [
+              "Items (",
+              itemCountLabel(segment.layout),
+              ")"
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "textarea",
+              {
+                onChange: (event) => onUpdate(index, "itemsText", event.target.value),
+                rows: Math.min(spec.maxItems, 7),
+                value: segment.itemsText
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Body" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "textarea",
+              {
+                onChange: (event) => onUpdate(index, "body", event.target.value),
+                rows: 3,
+                value: segment.body
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Footnote" }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+              "input",
+              {
+                onChange: (event) => onUpdate(index, "footnote", event.target.value),
+                type: "text",
+                value: segment.footnote
+              }
+            )
+          ] })
+        ] })
       ] })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "segment-fields", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Layout" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "select",
-          {
-            onChange: (event) => onUpdate(index, "layout", event.target.value),
-            value: segment.layout,
-            children: layoutKinds.map((layout) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("option", { value: layout, children: [
-              LAYOUT_SPECS[layout].label,
-              " / ",
-              LAYOUT_SPECS[layout].durationSeconds,
-              "s"
-            ] }, layout))
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Accent" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "input",
-          {
-            onChange: (event) => onUpdate(index, "accent", event.target.value),
-            type: "color",
-            value: segment.accent || theme.accent
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Title" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "input",
-          {
-            onChange: (event) => onUpdate(index, "title", event.target.value),
-            type: "text",
-            value: segment.title
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Subtitle" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "input",
-          {
-            onChange: (event) => onUpdate(index, "subtitle", event.target.value),
-            type: "text",
-            value: segment.subtitle
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Metric" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "input",
-          {
-            onChange: (event) => onUpdate(index, "metric", event.target.value),
-            type: "text",
-            value: segment.metric
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Values" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "input",
-          {
-            onChange: (event) => onUpdate(index, "valuesText", event.target.value),
-            placeholder: "80, 55, 90",
-            type: "text",
-            value: segment.valuesText
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Items" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "textarea",
-          {
-            onChange: (event) => onUpdate(index, "itemsText", event.target.value),
-            rows: 5,
-            value: segment.itemsText
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Body" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "textarea",
-          {
-            onChange: (event) => onUpdate(index, "body", event.target.value),
-            rows: 3,
-            value: segment.body
-          }
-        )
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { className: "builder-field wide", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "Footnote" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          "input",
-          {
-            onChange: (event) => onUpdate(index, "footnote", event.target.value),
-            type: "text",
-            value: segment.footnote
-          }
-        )
-      ] })
-    ] })
-  ] });
+    ] });
+  };
 
   // src/builder/ThemeEditor.tsx
   var import_jsx_runtime4 = __toESM(require_jsx_runtime());
@@ -22126,44 +22157,102 @@
   ] }, key)) });
 
   // src/builder/templateMapper.ts
-  var toFormSegment = (segment) => ({
-    accent: segment.accent ?? "",
-    body: segment.body ?? "",
-    footnote: segment.footnote ?? "",
-    itemsText: (segment.items ?? []).join("\n"),
-    layout: segment.layout,
-    metric: segment.metric ?? "",
-    subtitle: segment.subtitle ?? "",
-    title: segment.title,
-    valuesText: (segment.values ?? []).join(", ")
-  });
+  var defaultItems = [
+    "First point",
+    "Second point",
+    "Third point",
+    "Fourth point",
+    "Fifth point",
+    "Sixth point",
+    "Seventh point"
+  ];
+  var defaultLayout = "flowchart";
+  var toFormSegment = (segment) => {
+    if (isVideoShownSegment(segment)) {
+      return {
+        accent: "",
+        body: "",
+        durationSeconds: String(getSegmentDurationSeconds(segment)),
+        footnote: "",
+        itemsText: "",
+        layout: defaultLayout,
+        metric: "",
+        subtitle: "",
+        title: LAYOUT_SPECS[defaultLayout].label,
+        valuesText: "",
+        videoShown: true
+      };
+    }
+    return {
+      accent: segment.accent ?? "",
+      body: segment.body ?? "",
+      durationSeconds: String(getSegmentDurationSeconds(segment)),
+      footnote: segment.footnote ?? "",
+      itemsText: (segment.items ?? []).join("\n"),
+      layout: segment.layout,
+      metric: segment.metric ?? "",
+      subtitle: segment.subtitle ?? "",
+      title: segment.title,
+      valuesText: (segment.values ?? []).join(", "),
+      videoShown: false
+    };
+  };
   var newSegment = (layout = "flowchart") => ({
     accent: "",
     body: "",
+    durationSeconds: String(LAYOUT_SPECS[layout].durationSeconds),
     footnote: "",
-    itemsText: ["First point", "Second point", "Third point"].join("\n"),
+    itemsText: defaultItems.slice(0, LAYOUT_SPECS[layout].recommendedItems).join("\n"),
     layout,
     metric: "",
     subtitle: "",
     title: LAYOUT_SPECS[layout].label,
-    valuesText: ""
+    valuesText: "",
+    videoShown: false
   });
   var parseItems = (value) => value.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
   var parseValues = (value) => value.split(",").map((item) => Number(item.trim())).filter((item) => Number.isFinite(item));
-  var toTemplate = (title, theme, segments) => ({
+  var parseDurationSeconds = (layout, value) => getSegmentDurationSeconds({
+    durationSeconds: Number(value),
+    layout,
+    title: LAYOUT_SPECS[layout].label
+  });
+  var parseVideoDurationSeconds = (value) => getSegmentDurationSeconds({
+    durationSeconds: Number(value),
+    videoShown: true
+  });
+  var toTemplate = (title, hookText, intro, outro, caption, theme, videoBased, segments) => ({
     title: title.trim() || "Untitled infographic",
+    intro,
+    outro,
+    videoBased,
+    caption: videoBased && caption,
     theme,
-    segments: segments.map((segment) => ({
-      layout: segment.layout,
-      title: segment.title.trim() || LAYOUT_SPECS[segment.layout].label,
-      ...segment.subtitle.trim() ? { subtitle: segment.subtitle.trim() } : {},
-      ...segment.body.trim() ? { body: segment.body.trim() } : {},
-      ...segment.metric.trim() ? { metric: segment.metric.trim() } : {},
-      ...segment.footnote.trim() ? { footnote: segment.footnote.trim() } : {},
-      ...segment.accent.trim() ? { accent: segment.accent.trim() } : {},
-      ...parseItems(segment.itemsText).length > 0 ? { items: parseItems(segment.itemsText) } : {},
-      ...parseValues(segment.valuesText).length > 0 ? { values: parseValues(segment.valuesText) } : {}
-    }))
+    ...intro && hookText.trim() ? { hookText: hookText.trim() } : {},
+    segments: segments.map((segment) => {
+      if (videoBased && segment.videoShown) {
+        return {
+          videoShown: true,
+          durationSeconds: parseVideoDurationSeconds(segment.durationSeconds)
+        };
+      }
+      return {
+        videoShown: false,
+        layout: segment.layout,
+        title: segment.title.trim() || LAYOUT_SPECS[segment.layout].label,
+        durationSeconds: parseDurationSeconds(
+          segment.layout,
+          segment.durationSeconds
+        ),
+        ...segment.subtitle.trim() ? { subtitle: segment.subtitle.trim() } : {},
+        ...segment.body.trim() ? { body: segment.body.trim() } : {},
+        ...segment.metric.trim() ? { metric: segment.metric.trim() } : {},
+        ...segment.footnote.trim() ? { footnote: segment.footnote.trim() } : {},
+        ...segment.accent.trim() ? { accent: segment.accent.trim() } : {},
+        ...parseItems(segment.itemsText).length > 0 ? { items: parseItems(segment.itemsText) } : {},
+        ...parseValues(segment.valuesText).length > 0 ? { values: parseValues(segment.valuesText) } : {}
+      };
+    })
   });
 
   // src/TemplateBuilderApp.tsx
@@ -22172,17 +22261,38 @@
     initialTemplate
   }) => {
     const [title, setTitle] = (0, import_react.useState)(initialTemplate.title);
+    const [hookText, setHookText] = (0, import_react.useState)(initialTemplate.hookText ?? "");
+    const [intro, setIntro] = (0, import_react.useState)(initialTemplate.intro === true);
+    const [outro, setOutro] = (0, import_react.useState)(initialTemplate.outro === true);
+    const [videoBased, setVideoBased] = (0, import_react.useState)(
+      initialTemplate.videoBased === true
+    );
+    const [caption, setCaption] = (0, import_react.useState)(
+      initialTemplate.videoBased === true && initialTemplate.caption === true
+    );
     const [theme, setTheme] = (0, import_react.useState)({
       ...defaultTheme,
       ...initialTemplate.theme
     });
     const [segments, setSegments] = (0, import_react.useState)(
-      initialTemplate.segments.map(toFormSegment)
+      initialTemplate.segments.map((segment) => ({
+        ...toFormSegment(segment),
+        videoShown: initialTemplate.videoBased === true && segment.videoShown === true
+      }))
     );
     const [copied, setCopied] = (0, import_react.useState)(false);
     const template = (0, import_react.useMemo)(
-      () => toTemplate(title, theme, segments),
-      [title, theme, segments]
+      () => toTemplate(
+        title,
+        hookText,
+        intro,
+        outro,
+        caption,
+        theme,
+        videoBased,
+        segments
+      ),
+      [title, hookText, intro, outro, caption, theme, videoBased, segments]
     );
     const json = (0, import_react.useMemo)(() => JSON.stringify(template, null, 2), [template]);
     const updateTheme = (key, value) => {
@@ -22194,13 +22304,24 @@
     };
     const updateSegment = (index, key, value) => {
       setSegments(
-        (current) => current.map(
-          (segment, segmentIndex) => segmentIndex === index ? {
+        (current) => current.map((segment, segmentIndex) => {
+          if (segmentIndex !== index) {
+            return segment;
+          }
+          if (key === "layout") {
+            const layout = String(value);
+            return {
+              ...segment,
+              layout,
+              durationSeconds: String(LAYOUT_SPECS[layout].durationSeconds),
+              ...!segment.title.trim() ? { title: LAYOUT_SPECS[layout].label } : {}
+            };
+          }
+          return {
             ...segment,
-            [key]: value,
-            ...key === "layout" && !segment.title.trim() ? { title: LAYOUT_SPECS[value].label } : {}
-          } : segment
-        )
+            [key]: value
+          };
+        })
       );
       setCopied(false);
     };
@@ -22249,17 +22370,116 @@
       setTitle(event.target.value);
       setCopied(false);
     };
+    const handleHookTextChange = (event) => {
+      setHookText(event.target.value);
+      setCopied(false);
+    };
+    const handleIntroChange = (event) => {
+      setIntro(event.target.checked);
+      setCopied(false);
+    };
+    const handleOutroChange = (event) => {
+      setOutro(event.target.checked);
+      setCopied(false);
+    };
+    const handleVideoBasedChange = (event) => {
+      const nextVideoBased = event.target.checked;
+      setVideoBased(nextVideoBased);
+      if (!nextVideoBased) {
+        setCaption(false);
+        setSegments(
+          (current) => current.map((segment) => ({
+            ...segment,
+            videoShown: false
+          }))
+        );
+      }
+      setCopied(false);
+    };
+    const handleCaptionChange = (event) => {
+      setCaption(event.target.checked);
+      setCopied(false);
+    };
     return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("form", { className: "builder-grid", onSubmit: handleSubmit, children: [
       /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("section", { className: "builder-main", children: [
         /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(BuilderHeader, { copied }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "builder-field", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Template title" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("input", { onChange: handleTitleChange, type: "text", value: title })
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "builder-settings", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "builder-toggle-grid", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "builder-field builder-toggle", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                "input",
+                {
+                  checked: intro,
+                  onChange: handleIntroChange,
+                  type: "checkbox"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Intro" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "builder-field builder-toggle", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                "input",
+                {
+                  checked: videoBased,
+                  onChange: handleVideoBasedChange,
+                  type: "checkbox"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Video" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "builder-field builder-toggle", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                "input",
+                {
+                  checked: outro,
+                  onChange: handleOutroChange,
+                  type: "checkbox"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Outro" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "builder-field builder-toggle", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                "input",
+                {
+                  checked: caption,
+                  disabled: !videoBased,
+                  onChange: handleCaptionChange,
+                  type: "checkbox"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Caption" })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: `builder-field ${intro ? "" : "title-field-wide"}`, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Template title" }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("input", { onChange: handleTitleChange, type: "text", value: title })
+          ] }),
+          intro ? /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "builder-field hook-field", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: "Hook text" }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+              "input",
+              {
+                onChange: handleHookTextChange,
+                required: true,
+                type: "text",
+                value: hookText
+              }
+            )
+          ] }) : null
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(ThemeEditor, { onChange: updateTheme, theme }),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "segments-header", children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h2", { children: "Segments" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { className: "builder-secondary", onClick: addSegment, type: "button", children: "Add segment" })
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            "button",
+            {
+              className: "builder-secondary",
+              onClick: addSegment,
+              type: "button",
+              children: "Add segment"
+            }
+          )
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "segments-list", children: segments.map((segment, index) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
           SegmentEditor,
@@ -22271,9 +22491,10 @@
             onUpdate: updateSegment,
             segment,
             segmentCount: segments.length,
-            theme
+            theme,
+            videoBased
           },
-          `${segment.layout}-${index}`
+          `${segment.videoShown ? "video" : segment.layout}-${index}`
         )) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(JsonPanel, { copied, json, onCopy: () => void copyJson() })
@@ -22283,7 +22504,12 @@
   // src/templateBuilderPage.tsx
   var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   (0, import_client.createRoot)(document.getElementById("root")).render(
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react2.default.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("main", { className: "builder-shell builder-page", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(TemplateBuilderApp, { initialTemplate: template_default }) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react2.default.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("main", { className: "builder-shell builder-page", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+      TemplateBuilderApp,
+      {
+        initialTemplate: template_default
+      }
+    ) }) })
   );
 })();
 /*! Bundled license information:

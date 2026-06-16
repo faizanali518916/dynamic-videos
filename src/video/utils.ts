@@ -1,6 +1,10 @@
 import type { CSSProperties } from "react";
 import { interpolate } from "remotion";
-import type { InfographicSegment, Theme } from "../layoutCatalog";
+import {
+  getLayoutItemCount,
+  type AnimationSegment,
+  type Theme,
+} from "../layoutCatalog";
 import { BRAND_FONTS } from "../brand";
 
 const fallbackItems = [
@@ -50,8 +54,8 @@ export const withAlpha = (color: string, alpha: number): string => {
 };
 
 export const ensureItems = (
-  segment: InfographicSegment,
-  desiredCount: number,
+  segment: AnimationSegment,
+  desiredCount = getLayoutItemCount(segment),
 ): string[] => {
   const existing = segment.items?.filter(Boolean) ?? [];
   const merged = [...existing, ...fallbackItems];
@@ -60,10 +64,11 @@ export const ensureItems = (
 };
 
 export const ensureValues = (
-  segment: InfographicSegment,
+  segment: AnimationSegment,
   desiredCount: number,
 ): number[] => {
-  const existing = segment.values?.filter((value) => Number.isFinite(value)) ?? [];
+  const existing =
+    segment.values?.filter((value) => Number.isFinite(value)) ?? [];
   const merged = [...existing, ...fallbackValues];
 
   return merged.slice(0, desiredCount);

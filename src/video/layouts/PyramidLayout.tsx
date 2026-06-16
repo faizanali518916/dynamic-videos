@@ -13,7 +13,7 @@ export const PyramidLayout = ({
   segment,
   theme,
 }: LayoutProps) => {
-  const items = ensureItems(segment, 5);
+  const items = ensureItems(segment);
 
   const baseWidth = 760;
   const layerHeight = 105;

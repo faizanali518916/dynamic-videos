@@ -1,0 +1,38 @@
+{
+  "title": "Operating System For Modern Growth",
+  "intro": true,
+  "outro": true,
+  "videoBased": false,
+  "caption": false,
+  "theme": {
+    "background": "#131532",
+    "surface": "#1b1e46",
+    "primary": "#606bfa",
+    "secondary": "#a0a6fc",
+    "dark": "#131532",
+    "accent": "#606bfa",
+    "text": "#f7f8ff",
+    "muted": "#c9cdfd"
+  },
+  "hookText": "Testing",
+  "segments": [
+    {
+      "videoShown": false,
+      "layout": "radial",
+      "title": "Some points",
+      "durationSeconds": 6,
+      "subtitle": "Testing 1",
+      "body": "Wow, so cool",
+      "metric": "Testing 2",
+      "footnote": "Also so cool",
+      "items": [
+        "First point",
+        "Second point",
+        "Third point",
+        "Fourth point",
+        "Fifth point"
+      ],
+      "values": [50, 60, 70, 80, 90]
+    }
+  ]
+}

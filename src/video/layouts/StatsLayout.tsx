@@ -1,16 +1,40 @@
 import { GlowCard } from "../primitives/GlowCard";
 import { MetricBadge } from "../primitives/MetricBadge";
 import type { LayoutProps } from "../types";
-import { ensureItems, ensureValues, enterStyle, reveal, subheadingTextStyle, vividGradient, withAlpha } from "../utils";
+import {
+  ensureItems,
+  ensureValues,
+  enterStyle,
+  reveal,
+  subheadingTextStyle,
+  vividGradient,
+  withAlpha,
+} from "../utils";
 
 export const StatsLayout = ({ accent, frame, segment, theme }: LayoutProps) => {
-  const items = ensureItems(segment, 4);
+  const items = ensureItems(segment);
   const values = ensureValues(segment, items.length);
 
   return (
-    <div style={{ display: "grid", gap: 24, gridTemplateRows: "310px 1fr", width: "100%" }}>
-      <GlowCard accent={accent} shine={reveal(frame)} theme={theme} style={{ padding: 32 }}>
-        <MetricBadge accent={accent} metric={segment.metric ?? "84%"} theme={theme} />
+    <div
+      style={{
+        display: "grid",
+        gap: 24,
+        gridTemplateRows: "310px 1fr",
+        width: "100%",
+      }}
+    >
+      <GlowCard
+        accent={accent}
+        shine={reveal(frame)}
+        theme={theme}
+        style={{ padding: 32 }}
+      >
+        <MetricBadge
+          accent={accent}
+          metric={segment.metric ?? "84%"}
+          theme={theme}
+        />
         <div
           style={{
             background: withAlpha(accent, 0.16),
@@ -41,14 +65,24 @@ export const StatsLayout = ({ accent, frame, segment, theme }: LayoutProps) => {
             key={item}
             shine={reveal(frame, itemIndex + 2)}
             theme={theme}
-            style={{ padding: 28, ...enterStyle(reveal(frame, itemIndex + 2), 24) }}
+            style={{
+              padding: 28,
+              ...enterStyle(reveal(frame, itemIndex + 2), 24),
+            }}
           >
-            <div style={{ color: accent, fontSize: 54, fontWeight: 950, lineHeight: 1 }}>
+            <div
+              style={{
+                color: accent,
+                fontSize: 54,
+                fontWeight: 950,
+                lineHeight: 1,
+              }}
+            >
               {values[itemIndex]}%
             </div>
             <div
               style={{
-              ...subheadingTextStyle,
+                ...subheadingTextStyle,
                 color: theme.text,
                 fontSize: 29,
                 fontWeight: 850,

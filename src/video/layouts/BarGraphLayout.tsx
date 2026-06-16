@@ -1,9 +1,22 @@
 import { GlowCard } from "../primitives/GlowCard";
 import type { LayoutProps } from "../types";
-import { ensureItems, ensureValues, headingTextStyle, reveal, subheadingTextStyle, vividGradient, withAlpha } from "../utils";
+import {
+  ensureItems,
+  ensureValues,
+  headingTextStyle,
+  reveal,
+  subheadingTextStyle,
+  vividGradient,
+  withAlpha,
+} from "../utils";
 
-export const BarGraphLayout = ({ accent, frame, segment, theme }: LayoutProps) => {
-  const items = ensureItems(segment, 5);
+export const BarGraphLayout = ({
+  accent,
+  frame,
+  segment,
+  theme,
+}: LayoutProps) => {
+  const items = ensureItems(segment);
   const values = ensureValues(segment, items.length);
   const maxValue = Math.max(...values, 1);
 

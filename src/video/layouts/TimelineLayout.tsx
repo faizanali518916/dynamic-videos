@@ -1,10 +1,23 @@
 import { Arrow } from "../primitives/Arrow";
 import { GlowCard } from "../primitives/GlowCard";
 import type { LayoutProps } from "../types";
-import { ensureItems, enterStyle, headingTextStyle, reveal, subheadingTextStyle, vividGradient, withAlpha } from "../utils";
+import {
+  ensureItems,
+  enterStyle,
+  headingTextStyle,
+  reveal,
+  subheadingTextStyle,
+  vividGradient,
+  withAlpha,
+} from "../utils";
 
-export const TimelineLayout = ({ accent, frame, segment, theme }: LayoutProps) => {
-  const items = ensureItems(segment, 5);
+export const TimelineLayout = ({
+  accent,
+  frame,
+  segment,
+  theme,
+}: LayoutProps) => {
+  const items = ensureItems(segment);
 
   return (
     <div style={{ position: "relative", width: "100%" }}>
@@ -53,7 +66,12 @@ export const TimelineLayout = ({ accent, frame, segment, theme }: LayoutProps) =
               >
                 {String(itemIndex + 1).padStart(2, "0")}
               </div>
-              <GlowCard accent={accent} shine={amount} theme={theme} style={{ padding: 28 }}>
+              <GlowCard
+                accent={accent}
+                shine={amount}
+                theme={theme}
+                style={{ padding: 28 }}
+              >
                 <Arrow
                   accent={accent}
                   opacity={amount * 0.7}
@@ -70,7 +88,9 @@ export const TimelineLayout = ({ accent, frame, segment, theme }: LayoutProps) =
                 >
                   {item}
                 </div>
-                <div style={{ color: theme.muted, fontSize: 22, marginTop: 10 }}>
+                <div
+                  style={{ color: theme.muted, fontSize: 22, marginTop: 10 }}
+                >
                   <span style={{ fontFamily: subheadingTextStyle.fontFamily }}>
                     Milestone {itemIndex + 1}
                   </span>
