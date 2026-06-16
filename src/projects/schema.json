@@ -1,0 +1,195 @@
+{
+  "purpose": "Reference guide for generating InfographicTemplate JSON from a transcript. Use this alongside the transcript to pick layouts, keep segment text concise, and structure the video coherently.",
+  "globalRules": [
+    "Use one clear idea per segment.",
+    "Keep titles short and direct.",
+    "Use subtitles for the interpretation, not the same words as the title.",
+    "Use body text for the explanation and items for the supporting points.",
+    "Prefer 3 to 6 items unless the layout specifically suggests otherwise.",
+    "Use values only when the layout needs numeric emphasis or a data comparison.",
+    "Use videoShown true only when the original source video should play instead of an animated layout."
+  ],
+  "templateShape": {
+    "title": "string",
+    "hookText": "string",
+    "intro": "boolean",
+    "outro": "boolean",
+    "videoBased": "boolean",
+    "caption": "boolean",
+    "theme": {
+      "background": "hex color",
+      "surface": "hex color",
+      "primary": "hex color",
+      "secondary": "hex color",
+      "dark": "hex color",
+      "accent": "hex color",
+      "text": "hex color",
+      "muted": "hex color"
+    },
+    "segments": [
+      {
+        "videoShown": true,
+        "durationSeconds": 5
+      },
+      {
+        "videoShown": false,
+        "layout": "flowchart",
+        "title": "string",
+        "durationSeconds": 5,
+        "subtitle": "string",
+        "body": "string",
+        "metric": "string",
+        "footnote": "string",
+        "accent": "string",
+        "items": ["string"],
+        "values": [0]
+      }
+    ]
+  },
+  "segmentGuidance": {
+    "videoShown": {
+      "useWhen": "The source video should continue on screen for this section.",
+      "notes": [
+        "No layout fields are used.",
+        "Only durationSeconds matters."
+      ]
+    },
+    "animatedSegment": {
+      "useWhen": "You want a designed infographic scene instead of the source video.",
+      "notes": [
+        "Choose exactly one layout.",
+        "Provide a short title.",
+        "Add only the fields that help the specific layout."
+      ]
+    }
+  },
+  "layouts": [
+    {
+      "layout": "flowchart",
+      "label": "Flowchart",
+      "bestFor": ["step-by-step logic", "cause and effect", "ordered decisions"],
+      "useWhen": "The audience should follow a clear progression from one idea to the next.",
+      "recommendedItems": 5,
+      "durationSeconds": 5,
+      "fieldFocus": ["title", "items", "subtitle"],
+      "notes": "Use short action phrases for each step."
+    },
+    {
+      "layout": "barGraph",
+      "label": "Bar graph",
+      "bestFor": ["rankings", "comparisons with numbers", "performance snapshots"],
+      "useWhen": "You need to compare values visually and make the scale matter.",
+      "recommendedItems": 5,
+      "durationSeconds": 6,
+      "fieldFocus": ["title", "items", "values", "metric"],
+      "notes": "Items are labels. Values should align with each label and represent the comparative magnitude."
+    },
+    {
+      "layout": "timeline",
+      "label": "Timeline",
+      "bestFor": ["history", "milestones", "phases over time"],
+      "useWhen": "The transcript mentions an order of events or a sequence across time.",
+      "recommendedItems": 5,
+      "durationSeconds": 6,
+      "fieldFocus": ["title", "items", "subtitle"],
+      "notes": "Write each item as a milestone or phase, not a paragraph."
+    },
+    {
+      "layout": "comparison",
+      "label": "Comparison",
+      "bestFor": ["before vs after", "option A vs option B", "pros and cons"],
+      "useWhen": "You want the audience to compare two or more contrasting ideas side by side.",
+      "recommendedItems": 6,
+      "durationSeconds": 5,
+      "fieldFocus": ["title", "items", "values", "subtitle"],
+      "notes": "Keep the compared items parallel in structure."
+    },
+    {
+      "layout": "radial",
+      "label": "Radial map",
+      "bestFor": ["central concept with spokes", "ecosystems", "feature clusters"],
+      "useWhen": "One central idea branches into several related points.",
+      "recommendedItems": 6,
+      "durationSeconds": 6,
+      "fieldFocus": ["title", "items", "subtitle"],
+      "notes": "Make the middle idea obvious and keep the surrounding items tightly related."
+    },
+    {
+      "layout": "matrix",
+      "label": "Matrix",
+      "bestFor": ["2x2 categorization", "simple classification", "quadrant-like placement"],
+      "useWhen": "You need to organize ideas into a compact grid with four distinct zones.",
+      "recommendedItems": 4,
+      "durationSeconds": 5,
+      "fieldFocus": ["title", "items", "subtitle"],
+      "notes": "Use four clear labels. This works best when the transcript naturally divides into four buckets."
+    },
+    {
+      "layout": "stats",
+      "label": "Stats stack",
+      "bestFor": ["big numbers", "key facts", "quick proof points"],
+      "useWhen": "A segment should land a few punchy metrics or evidence points instead of a process.",
+      "recommendedItems": 4,
+      "durationSeconds": 5,
+      "fieldFocus": ["title", "items", "metric", "footnote"],
+      "notes": "Use short stat-style statements. The visual emphasis is on the numbers or the punchline."
+    },
+    {
+      "layout": "process",
+      "label": "Process",
+      "bestFor": ["workflow", "operating system", "how something gets done"],
+      "useWhen": "The transcript explains how work moves through stages or how a system is improved.",
+      "recommendedItems": 5,
+      "durationSeconds": 6,
+      "fieldFocus": ["title", "items", "body", "subtitle"],
+      "notes": "This is the best default for operational or procedural storytelling."
+    },
+    {
+      "layout": "pyramid",
+      "label": "Pyramid",
+      "bestFor": ["hierarchy of importance", "foundations", "from broad to specific"],
+      "useWhen": "The message should move from a wide base of support to a focused top point.",
+      "recommendedItems": 5,
+      "durationSeconds": 5,
+      "fieldFocus": ["title", "items", "subtitle"],
+      "notes": "Use lower levels for broad drivers and upper levels for the final takeaway."
+    },
+    {
+      "layout": "roadmap",
+      "label": "Roadmap",
+      "bestFor": ["phases", "rollout plans", "strategy over time"],
+      "useWhen": "The transcript points to a future path, implementation plan, or growth sequence.",
+      "recommendedItems": 5,
+      "durationSeconds": 6,
+      "fieldFocus": ["title", "items", "subtitle"],
+      "notes": "Think of this as a future-facing timeline with a stronger sense of direction."
+    },
+    {
+      "layout": "hierarchy",
+      "label": "Hierarchy",
+      "bestFor": ["organizational layers", "system structure", "nested categories"],
+      "useWhen": "The content should be shown as a top-down structure with parent and child relationships.",
+      "recommendedItems": 7,
+      "durationSeconds": 6,
+      "fieldFocus": ["title", "items", "subtitle"],
+      "notes": "Use when the transcript describes structure, ownership, or levels of control."
+    },
+    {
+      "layout": "quadrant",
+      "label": "Quadrant",
+      "bestFor": ["tradeoffs", "priority maps", "four-way positioning"],
+      "useWhen": "The idea naturally belongs in a four-box grid and each box needs a distinct label.",
+      "recommendedItems": 4,
+      "durationSeconds": 5,
+      "fieldFocus": ["title", "items", "values", "subtitle"],
+      "notes": "This is ideal for concise classification or strategic framing."
+    }
+  ],
+  "promptingNotes": [
+    "Choose layouts based on the meaning of the transcript, not on visual variety alone.",
+    "If a transcript section is instructional, process and roadmap are usually the first layouts to consider.",
+    "If a section is comparative, choose comparison, barGraph, matrix, or quadrant.",
+    "If a section is descriptive but compact, use stats, pyramid, radial, or hierarchy.",
+    "When in doubt, keep the text short and let the layout carry the structure."
+  ]
+}

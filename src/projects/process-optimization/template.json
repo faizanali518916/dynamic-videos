@@ -1,6 +1,6 @@
 {
   "title": "Process Optimization For Modern Growth",
-  "intro": false,
+  "intro": true,
   "outro": true,
   "videoBased": true,
   "caption": true,
@@ -14,6 +14,7 @@
     "text": "#f7f8ff",
     "muted": "#c9cdfd"
   },
+  "hookText": "Very professional intro :)",
   "segments": [
     {
       "videoShown": true,
@@ -21,12 +22,13 @@
     },
     {
       "videoShown": false,
-      "layout": "flowchart",
+      "layout": "pyramid",
       "title": "The failure is operational",
-      "durationSeconds": 6,
+      "durationSeconds": 5,
       "subtitle": "The product and the market are not the whole story.",
       "body": "The real problem sits underneath the operations.",
-      "items": ["Product", "Market", "Operations", "Bottlenecks", "Scale"]
+      "items": ["Product", "Market", "Operations", "Bottlenecks", "Scale"],
+      "values": [0]
     },
     {
       "videoShown": true,
@@ -44,7 +46,8 @@
         "Find the bottlenecks",
         "Identify repetitive costs",
         "Automate the best practice"
-      ]
+      ],
+      "values": [0]
     },
     {
       "videoShown": true,
@@ -63,7 +66,8 @@
         "Automate best practice",
         "Scale with accuracy",
         "Claim the free audit"
-      ]
+      ],
+      "values": [0]
     },
     {
       "videoShown": true,

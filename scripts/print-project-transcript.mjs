@@ -9,7 +9,7 @@ const { projectNameArg } = parseArgs(process.argv.slice(2));
 
 let projectName = projectNameArg;
 let projectDir;
-let captionsPath;
+let tokensPath;
 
 main().catch((err) => {
   fail(err?.stack || err?.message || String(err));
@@ -21,22 +21,22 @@ async function main() {
   }
 
   projectDir = path.join(PROJECTS_DIR, projectName);
-  captionsPath = path.join(projectDir, "captions.json");
+  tokensPath = path.join(projectDir, "tokens.json");
 
   assertProjectExists();
-  assertCaptionsExist();
+  assertTokensExist();
 
-  const captions = readCaptionsJson();
-  const transcript = captionsToText(captions);
+  const tokens = readTokensJson();
+  const transcript = tokensToLines(tokens);
 
-  if (!transcript) {
-    fail("captions.json was found, but no transcript text could be generated.");
+  if (transcript.length === 0) {
+    fail("tokens.json was found, but no transcript lines could be generated.");
   }
 
   console.log("");
   console.log("=== TRANSCRIPT ===");
   console.log("");
-  console.log(transcript);
+  console.log(transcript.join("\n"));
   console.log("");
 }
 
@@ -71,7 +71,7 @@ async function selectProjectInteractive() {
     console.log("Available projects:");
 
     for (const project of projects) {
-      const status = project.hasCaptions ? "" : " [missing captions.json]";
+      const status = project.hasTokens ? "" : " [missing tokens.json]";
       console.log(`- ${project.name}${status}`);
     }
 
@@ -99,17 +99,17 @@ async function selectProjectInteractive() {
 
       console.log("Select project");
       console.log("");
-      console.log("Use ↑ / ↓ then press Enter.");
+      console.log("Use Up / Down then press Enter.");
       console.log("");
 
       projects.forEach((project, index) => {
         const isSelected = index === selectedIndex;
         const prefix = isSelected ? ">" : " ";
-        const captionsStatus = project.hasCaptions
-          ? `  [${project.captionCount} captions]`
-          : "  [missing captions.json]";
+        const tokensStatus = project.hasTokens
+          ? `  [${project.tokenCount} tokens]`
+          : "  [missing tokens.json]";
 
-        console.log(`${prefix} ${project.name}${captionsStatus}`);
+        console.log(`${prefix} ${project.name}${tokensStatus}`);
       });
 
       console.log("");
@@ -177,26 +177,13 @@ function getProjectFolders() {
     .filter((entry) => entry.isDirectory())
     .map((entry) => {
       const folder = path.join(PROJECTS_DIR, entry.name);
-      const captionsFile = path.join(folder, "captions.json");
-
-      let captionCount = 0;
-
-      if (fs.existsSync(captionsFile)) {
-        try {
-          const raw = fs.readFileSync(captionsFile, "utf8");
-          const json = JSON.parse(raw);
-          const captions = extractCaptionsArray(json);
-          captionCount = captions.length;
-        } catch {
-          captionCount = 0;
-        }
-      }
+      const tokensFile = path.join(folder, "tokens.json");
 
       return {
         name: entry.name,
         folder,
-        hasCaptions: fs.existsSync(captionsFile),
-        captionCount,
+        hasTokens: fs.existsSync(tokensFile),
+        tokenCount: countTokens(tokensFile),
       };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -212,82 +199,152 @@ function assertProjectExists() {
   }
 }
 
-function assertCaptionsExist() {
-  if (!fs.existsSync(captionsPath)) {
+function assertTokensExist() {
+  if (!fs.existsSync(tokensPath)) {
     fail(
       [
-        "captions.json not found in project folder.",
+        "tokens.json not found in project folder.",
         "",
         "Expected:",
-        `  ${captionsPath}`,
+        `  ${tokensPath}`,
         "",
-        "Generate captions first, then run this script again.",
+        "Generate tokens first with:",
+        "  node scripts/generate-project-captions.mjs <project-name> --tokens",
+        "",
+        "Or create tokens from existing captions with:",
+        "  node scripts/generate-project-captions.mjs <project-name> --tokens-only",
       ].join("\n"),
     );
   }
 }
 
-function readCaptionsJson() {
+function readTokensJson() {
   let json;
 
   try {
-    const raw = fs.readFileSync(captionsPath, "utf8");
+    const raw = fs.readFileSync(tokensPath, "utf8");
     json = JSON.parse(raw);
   } catch (error) {
     fail(
       [
-        "Failed to read or parse captions.json.",
+        "Failed to read or parse tokens.json.",
         "",
-        `File: ${captionsPath}`,
+        `File: ${tokensPath}`,
         "",
         error.message,
       ].join("\n"),
     );
   }
 
-  const captions = extractCaptionsArray(json);
+  const tokens = extractTokensArray(json);
 
-  if (!Array.isArray(captions)) {
+  if (!Array.isArray(tokens)) {
     fail(
       [
-        "Invalid captions.json format.",
+        "Invalid tokens.json format.",
         "",
         "Expected either:",
-        "  Caption[]",
+        "  Token[]",
         "",
         "Or:",
-        '  { "captions": Caption[] }',
+        '  { "tokens": Token[] }',
+        "",
+        "Or:",
+        '  { "pages": TikTokPage[] }',
       ].join("\n"),
     );
   }
 
-  return captions;
+  return tokens;
 }
 
-function extractCaptionsArray(json) {
+function extractTokensArray(json) {
   if (Array.isArray(json)) {
     return json;
   }
 
-  if (json && Array.isArray(json.captions)) {
-    return json.captions;
+  if (json && Array.isArray(json.tokens)) {
+    return json.tokens;
+  }
+
+  if (json && Array.isArray(json.pages)) {
+    return json.pages.map((page) => ({
+      text: page.text,
+      startMs: page.startMs,
+      endMs:
+        typeof page.durationMs === "number"
+          ? Math.round(page.startMs + page.durationMs)
+          : page.endMs,
+    }));
   }
 
   return null;
 }
 
-function captionsToText(captions) {
-  return captions
-    .map((caption) => {
-      if (!caption || typeof caption.text !== "string") {
+function tokensToLines(tokens) {
+  return tokens
+    .map((token) => {
+      if (!token || typeof token.text !== "string") {
         return "";
       }
 
-      return caption.text;
+      const text = normalizeText(token.text);
+      const startMs = resolveStartMs(token);
+      const endMs = resolveEndMs(token, startMs);
+
+      if (!text || startMs === null || endMs === null) {
+        return "";
+      }
+
+      return `${formatMs(startMs)}-${formatMs(endMs)}: ${text}`;
     })
-    .join("")
-    .replace(/\s+/g, " ")
-    .trim();
+    .filter(Boolean);
+}
+
+function resolveStartMs(token) {
+  const value =
+    token.startMs ?? token.fromMs ?? token.timestampMs ?? token.start ?? null;
+
+  return Number.isFinite(Number(value)) ? Number(value) : null;
+}
+
+function resolveEndMs(token, startMs) {
+  const explicitEnd =
+    token.endMs ?? token.toMs ?? token.end ?? token.stopMs ?? null;
+
+  if (Number.isFinite(Number(explicitEnd))) {
+    return Number(explicitEnd);
+  }
+
+  if (Number.isFinite(Number(token.durationMs)) && startMs !== null) {
+    return startMs + Number(token.durationMs);
+  }
+
+  return null;
+}
+
+function normalizeText(text) {
+  return text.replace(/\s+/g, " ").trim();
+}
+
+function formatMs(value) {
+  return String(Math.max(0, Math.round(value)));
+}
+
+function countTokens(tokensFile) {
+  if (!fs.existsSync(tokensFile)) {
+    return 0;
+  }
+
+  try {
+    const raw = fs.readFileSync(tokensFile, "utf8");
+    const json = JSON.parse(raw);
+    const tokens = extractTokensArray(json);
+
+    return Array.isArray(tokens) ? tokens.length : 0;
+  } catch {
+    return 0;
+  }
 }
 
 function fail(message) {

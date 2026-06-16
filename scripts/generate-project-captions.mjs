@@ -8,6 +8,7 @@ import {
   transcribe,
   toCaptions,
 } from "@remotion/install-whisper-cpp";
+import { createTikTokStyleCaptions } from "@remotion/captions";
 
 const ROOT_DIR = process.cwd();
 const PROJECTS_DIR = path.join(ROOT_DIR, "src", "projects");
@@ -23,13 +24,14 @@ const CACHE_ROOT = path.join(
 
 const WHISPER_PATH = path.join(CACHE_ROOT, "whisper.cpp");
 
-const { projectNameArg, model } = parseArgs(process.argv.slice(2));
+const { projectNameArg, model, mode } = parseArgs(process.argv.slice(2));
 
 let projectName = projectNameArg;
 let projectDir;
 let videoPath;
 let audioPath;
 let captionsPath;
+let tokensPath;
 
 main().catch((err) => {
   fail(err?.stack || err?.message || String(err));
@@ -46,8 +48,50 @@ async function main() {
   videoPath = path.join(projectDir, "video.mp4");
   audioPath = path.join(projectDir, "audio.wav");
   captionsPath = path.join(projectDir, "captions.json");
+  tokensPath = path.join(projectDir, "tokens.json");
 
   assertProjectExists();
+
+  if (mode === "tokens-only") {
+    const captions = readCaptionsJsonFromDisk();
+
+    if (!fs.existsSync(tokensPath)) {
+      createTokensJson(captions);
+    } else {
+      logSkip("tokens.json already exists");
+    }
+
+    console.log("");
+    console.log("DONE");
+    console.log(`Project:  ${projectName}`);
+    console.log(`Captions: ${relative(captionsPath)}`);
+    console.log(`Tokens:   ${relative(tokensPath)}`);
+
+    return;
+  }
+
+  if (fs.existsSync(captionsPath)) {
+    const captions = readCaptionsJsonFromDisk();
+
+    logSkip("captions.json already exists");
+
+    if (mode === "captions-and-tokens" && !fs.existsSync(tokensPath)) {
+      createTokensJson(captions);
+    } else if (mode === "captions-and-tokens") {
+      logSkip("tokens.json already exists");
+    }
+
+    console.log("");
+    console.log("DONE");
+    console.log(`Project:  ${projectName}`);
+    console.log(`Captions: ${relative(captionsPath)}`);
+    if (fs.existsSync(tokensPath)) {
+      console.log(`Tokens:   ${relative(tokensPath)}`);
+    }
+
+    return;
+  }
+
   assertVideoExists();
 
   if (!fs.existsSync(audioPath)) {
@@ -59,10 +103,12 @@ async function main() {
   await ensureWhisperInstalled();
   await ensureWhisperModelDownloaded();
 
-  if (!fs.existsSync(captionsPath)) {
-    await createCaptionsJson();
-  } else {
-    logSkip("captions.json already exists");
+  const captions = await ensureCaptionsJson();
+
+  if (mode === "captions-and-tokens" && !fs.existsSync(tokensPath)) {
+    createTokensJson(captions);
+  } else if (mode === "captions-and-tokens") {
+    logSkip("tokens.json already exists");
   }
 
   console.log("");
@@ -71,12 +117,17 @@ async function main() {
   console.log(`Video:    ${relative(videoPath)}`);
   console.log(`Audio:    ${relative(audioPath)}`);
   console.log(`Captions: ${relative(captionsPath)}`);
+  if (fs.existsSync(tokensPath)) {
+    console.log(`Tokens:   ${relative(tokensPath)}`);
+  }
   console.log(`Whisper:  ${WHISPER_PATH}`);
   console.log(`Model:    ${model}`);
 }
 
 function parseArgs(args) {
   let selectedModel = DEFAULT_MODEL;
+  let generateTokens = false;
+  let tokensOnly = false;
   const positional = [];
 
   for (let i = 0; i < args.length; i++) {
@@ -94,6 +145,16 @@ function parseArgs(args) {
       continue;
     }
 
+    if (arg === "--tokens") {
+      generateTokens = true;
+      continue;
+    }
+
+    if (arg === "--tokens-only") {
+      tokensOnly = true;
+      continue;
+    }
+
     positional.push(arg);
   }
 
@@ -103,9 +164,14 @@ function parseArgs(args) {
     selectedModel = positional[1];
   }
 
+  if (generateTokens && tokensOnly) {
+    fail("Use either --tokens or --tokens-only, not both.");
+  }
+
   return {
     projectNameArg: selectedProject,
     model: selectedModel,
+    mode: tokensOnly ? "tokens-only" : generateTokens ? "captions-and-tokens" : "captions-only",
   };
 }
 
@@ -162,9 +228,16 @@ async function selectProjectInteractive() {
         const isSelected = index === selectedIndex;
         const prefix = isSelected ? ">" : " ";
         const videoStatus = project.hasVideo ? "" : "  [missing video.mp4]";
-        const captionsStatus = project.hasCaptions ? "  [captions exist]" : "";
+        const captionsStatus = project.hasCaptions
+          ? `  [${project.captionCount} captions]`
+          : "  [missing captions.json]";
+        const tokensStatus = project.hasTokens
+          ? `  [${project.tokenCount} tokens]`
+          : "  [missing tokens.json]";
 
-        console.log(`${prefix} ${project.name}${videoStatus}${captionsStatus}`);
+        console.log(
+          `${prefix} ${project.name}${videoStatus}${captionsStatus}${tokensStatus}`,
+        );
       });
 
       console.log("");
@@ -240,6 +313,9 @@ function getProjectFolders() {
         folder,
         hasVideo: fs.existsSync(path.join(folder, "video.mp4")),
         hasCaptions: fs.existsSync(path.join(folder, "captions.json")),
+        hasTokens: fs.existsSync(path.join(folder, "tokens.json")),
+        captionCount: countCaptions(path.join(folder, "captions.json")),
+        tokenCount: countTokens(path.join(folder, "tokens.json")),
       };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -273,6 +349,15 @@ function assertVideoExists() {
   }
 
   logOk("video.mp4 found");
+}
+
+function ensureCaptionsJson() {
+  if (fs.existsSync(captionsPath)) {
+    logSkip("captions.json already exists");
+    return readCaptionsJsonFromDisk();
+  }
+
+  return createCaptionsJson();
 }
 
 function createAudioWav() {
@@ -421,6 +506,85 @@ async function createCaptionsJson() {
   logOk(
     `Created ${relative(captionsPath)} with ${captions.length} caption tokens`,
   );
+
+  return captions;
+}
+
+function createTokensJson(captions) {
+  logStep("tokens.json missing — creating TikTok-style token ranges");
+
+  const tokens = createTokensFromCaptions(captions);
+
+  if (!Array.isArray(tokens) || tokens.length === 0) {
+    fail("Captions were found, but no tokens could be generated.");
+  }
+
+  fs.writeFileSync(tokensPath, JSON.stringify(tokens, null, 2));
+
+  logOk(`Created ${relative(tokensPath)} with ${tokens.length} token ranges`);
+}
+
+function createTokensFromCaptions(captions) {
+  const pages = createTikTokStyleCaptions({
+    captions,
+    combineTokensWithinMilliseconds: 1_200,
+  }).pages;
+
+  return pages.map((page) => ({
+    text: page.text,
+    startMs: page.startMs,
+    endMs: Math.round(page.startMs + page.durationMs),
+  }));
+}
+
+function readCaptionsJsonFromDisk() {
+  if (!fs.existsSync(captionsPath)) {
+    fail(
+      [
+        "captions.json not found in project folder.",
+        "",
+        "Expected:",
+        `  ${captionsPath}`,
+        "",
+        "Generate captions first, then run this script again.",
+      ].join("\n"),
+    );
+  }
+
+  let json;
+
+  try {
+    const raw = fs.readFileSync(captionsPath, "utf8");
+    json = JSON.parse(raw);
+  } catch (error) {
+    fail(
+      [
+        "Failed to read or parse captions.json.",
+        "",
+        `File: ${captionsPath}`,
+        "",
+        error.message,
+      ].join("\n"),
+    );
+  }
+
+  const captions = extractCaptionsArray(json);
+
+  if (!Array.isArray(captions)) {
+    fail(
+      [
+        "Invalid captions.json format.",
+        "",
+        "Expected either:",
+        "  Caption[]",
+        "",
+        "Or:",
+        '  { "captions": Caption[] }',
+      ].join("\n"),
+    );
+  }
+
+  return captions;
 }
 
 function isWhisperInstalled() {
@@ -443,6 +607,62 @@ function getModelPathCandidates() {
     path.join(WHISPER_PATH, "models", `ggml-${model}.bin`),
     path.join(WHISPER_PATH, `ggml-${model}.bin`),
   ];
+}
+
+function countCaptions(captionsFile) {
+  if (!fs.existsSync(captionsFile)) {
+    return 0;
+  }
+
+  try {
+    const raw = fs.readFileSync(captionsFile, "utf8");
+    const json = JSON.parse(raw);
+    const captions = extractCaptionsArray(json);
+
+    return Array.isArray(captions) ? captions.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function countTokens(tokensFile) {
+  if (!fs.existsSync(tokensFile)) {
+    return 0;
+  }
+
+  try {
+    const raw = fs.readFileSync(tokensFile, "utf8");
+    const json = JSON.parse(raw);
+    const tokens = extractTokensArray(json);
+
+    return Array.isArray(tokens) ? tokens.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function extractCaptionsArray(json) {
+  if (Array.isArray(json)) {
+    return json;
+  }
+
+  if (json && Array.isArray(json.captions)) {
+    return json.captions;
+  }
+
+  return null;
+}
+
+function extractTokensArray(json) {
+  if (Array.isArray(json)) {
+    return json;
+  }
+
+  if (json && Array.isArray(json.tokens)) {
+    return json.tokens;
+  }
+
+  return null;
 }
 
 function isWhisperModelDownloaded() {
