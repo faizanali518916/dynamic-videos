@@ -7,15 +7,15 @@ import {
   useVideoConfig,
 } from "remotion";
 import {
-  INTRO_DURATION_SECONDS,
   OUTRO_DURATION_SECONDS,
+  INTRO_HOOK_DURATION_SECONDS,
   getSegmentDurationInFrames,
   isVideoShownSegment,
   type InfographicSegment,
 } from "../layoutCatalog";
 import { BRAND_FONTS } from "../brand";
 import { CaptionsOverlay } from "./CaptionsOverlay";
-import { IntroScene } from "./IntroScene";
+import { IntroHookOverlay } from "./IntroHookOverlay";
 import { SegmentScene } from "./SegmentScene";
 import type { InfographicVideoProps } from "./types";
 
@@ -82,37 +82,34 @@ const VideoOnlyScene = ({ startFrom, videoSrc }: VideoOnlySceneProps) => (
   </AbsoluteFill>
 );
 
-const getIntroDurationInFrames = (fps: number): number =>
-  Math.round(INTRO_DURATION_SECONDS * fps);
-
 const getOutroDurationInFrames = (fps: number): number =>
   Math.round(OUTRO_DURATION_SECONDS * fps);
 
 export const InfographicVideo = ({
-  captions = [],
+  transcriptPages = [],
   template,
   videoSrc,
 }: InfographicVideoProps) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const introDurationInFrames =
-    template.intro === true ? getIntroDurationInFrames(fps) : 0;
-  const segmentRanges = getSegmentRanges(template.segments, fps).map(
-    (range) => ({
-      ...range,
-      from: range.from + introDurationInFrames,
-    }),
-  );
+  const segmentRanges = getSegmentRanges(template.segments, fps);
   const segmentEndFrame = segmentRanges.reduce(
     (endFrame, range) =>
       Math.max(endFrame, range.from + range.durationInFrames),
-    introDurationInFrames,
+    0,
   );
   const outroDurationInFrames =
     template.outro === true ? getOutroDurationInFrames(fps) : 0;
   const isVideoBased = template.videoBased === true;
+  const introDurationInFrames =
+    template.intro === true
+      ? Math.round(INTRO_HOOK_DURATION_SECONDS * fps)
+      : 0;
   const showCaptions =
-    isVideoBased && template.caption === true && captions.length > 0;
+    isVideoBased &&
+    template.caption === true &&
+    transcriptPages.length > 0 &&
+    frame >= introDurationInFrames;
   const showVideoLayer =
     Boolean(videoSrc) &&
     isVideoBased &&
@@ -135,15 +132,6 @@ export const InfographicVideo = ({
         >
           <OffthreadVideo src={videoSrc} style={videoFillStyle} />
         </AbsoluteFill>
-      ) : null}
-
-      {template.intro === true ? (
-        <Sequence durationInFrames={introDurationInFrames}>
-          <IntroScene
-            durationInFrames={introDurationInFrames}
-            template={template}
-          />
-        </Sequence>
       ) : null}
 
       {segmentRanges.map(({ durationInFrames, from, segment }, index) => {
@@ -189,7 +177,13 @@ export const InfographicVideo = ({
         </Sequence>
       ) : null}
 
-      {showCaptions ? <CaptionsOverlay captions={captions} /> : null}
+      {showCaptions ? (
+        <CaptionsOverlay transcriptPages={transcriptPages} />
+      ) : null}
+
+      {template.intro === true ? (
+        <IntroHookOverlay template={template} />
+      ) : null}
     </AbsoluteFill>
   );
 };

@@ -7,12 +7,13 @@
     "Use body text for the explanation and items for the supporting points.",
     "Prefer 3 to 6 items unless the layout specifically suggests otherwise.",
     "Use values only when the layout needs numeric emphasis or a data comparison.",
-    "Use videoShown true only when the original source video should play instead of an animated layout."
+    "Use videoShown true only when the original source video should play instead of an animated layout.",
+    "If intro is true, show the hookText as an overlay at the start of the video; do not add extra duration for it."
   ],
   "templateShape": {
     "title": "string",
     "hookText": "string",
-    "intro": "boolean",
+    "intro": "boolean, hook overlay at start",
     "outro": "boolean",
     "videoBased": "boolean",
     "caption": "boolean",

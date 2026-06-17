@@ -1,77 +1,131 @@
 {
-  "title": "Process Optimization For Modern Growth",
+  "title": "What is Process Optimization?",
+  "hookText": "Your AI is not failing, your operations are.",
   "intro": true,
   "outro": true,
   "videoBased": true,
   "caption": true,
   "theme": {
     "background": "#131532",
-    "surface": "#1b1e46",
+    "surface": "#1B1E45",
     "primary": "#606bfa",
     "secondary": "#a0a6fc",
     "dark": "#131532",
-    "accent": "#606bfa",
-    "text": "#f7f8ff",
-    "muted": "#c9cdfd"
+    "accent": "#a0a6fc",
+    "text": "#FFFFFF",
+    "muted": "#C7CBFF"
   },
-  "hookText": "Very professional intro :)",
   "segments": [
     {
       "videoShown": true,
-      "durationSeconds": 9
+      "durationSeconds": 4.61
     },
     {
       "videoShown": false,
-      "layout": "pyramid",
-      "title": "The failure is operational",
-      "durationSeconds": 5,
-      "subtitle": "The product and the market are not the whole story.",
-      "body": "The real problem sits underneath the operations.",
-      "items": ["Product", "Market", "Operations", "Bottlenecks", "Scale"],
-      "values": [0]
+      "layout": "stats",
+      "title": "It Is Not the Market",
+      "durationSeconds": 4.41,
+      "subtitle": "The real issue is the mess underneath the business.",
+      "body": "Smart businesses often fail because their operations cannot support scale.",
+      "metric": "Hidden operational mess",
+      "footnote": "Product and market are not always the root cause.",
+      "accent": "#606bfa",
+      "items": [
+        "Weak workflows",
+        "Scattered execution",
+        "Unclear systems",
+        "Broken operations"
+      ]
     },
     {
       "videoShown": true,
-      "durationSeconds": 8
+      "durationSeconds": 8.79
+    },
+    {
+      "videoShown": false,
+      "layout": "comparison",
+      "title": "AI Cannot Fix Bad Habits",
+      "durationSeconds": 6.51,
+      "subtitle": "AI is useful, but it cannot repair a broken process by itself.",
+      "body": "If the foundation is messy, AI can multiply the same mistakes faster.",
+      "accent": "#a0a6fc",
+      "items": [
+        "Looks like: AI problem",
+        "Actually: Process problem",
+        "Looks like: Tool gap",
+        "Actually: Workflow gap",
+        "Looks like: Automation",
+        "Actually: Mess scaled faster"
+      ]
+    },
+    {
+      "videoShown": true,
+      "durationSeconds": 7.18
+    },
+    {
+      "videoShown": false,
+      "layout": "radial",
+      "title": "Where the Mess Comes From",
+      "durationSeconds": 7.42,
+      "subtitle": "Operational gaps usually come from disconnected ways of working.",
+      "body": "The business slows down when tools, people, and processes do not align.",
+      "accent": "#606bfa",
+      "items": [
+        "Scattered tools",
+        "Process gaps",
+        "Inconsistent steps",
+        "Manual handoffs",
+        "Repeated work",
+        "Unclear ownership"
+      ]
+    },
+    {
+      "videoShown": true,
+      "durationSeconds": 4.72
     },
     {
       "videoShown": false,
       "layout": "process",
-      "title": "Process optimization is fixing how you work",
-      "durationSeconds": 8,
-      "subtitle": "Map the work, remove the drag, then automate the best practice.",
-      "body": "We map the process, find the bottlenecks, identify repetitive costs, and then automate the best practice.",
+      "title": "Process Optimization",
+      "durationSeconds": 6.76,
+      "subtitle": "Simple meaning: fix how work gets done.",
+      "body": "Before adding more automation, the process itself needs to be cleaned and improved.",
+      "accent": "#a0a6fc",
       "items": [
-        "Map the process",
-        "Find the bottlenecks",
-        "Identify repetitive costs",
-        "Automate the best practice"
-      ],
-      "values": [0]
+        "Fix the workflow",
+        "Improve how tasks move",
+        "Remove unnecessary steps",
+        "Standardize execution",
+        "Prepare for scale"
+      ]
     },
     {
       "videoShown": true,
-      "durationSeconds": 10
+      "durationSeconds": 4.59
     },
     {
       "videoShown": false,
-      "layout": "roadmap",
-      "title": "Scale with accuracy",
-      "durationSeconds": 9,
-      "subtitle": "Fix the operating system before you scale the business.",
-      "body": "When the process is clean, scaling becomes more accurate and less fragile.",
+      "layout": "flowchart",
+      "title": "How SPCTEK AI Fixes It",
+      "durationSeconds": 9.02,
+      "subtitle": "We map the process first, then automate the best practice.",
+      "body": "The goal is not to automate everything. The goal is to automate the right way of working.",
+      "accent": "#606bfa",
       "items": [
-        "Map the process",
-        "Fix the bottlenecks",
-        "Automate best practice",
-        "Scale with accuracy",
-        "Claim the free audit"
-      ],
-      "values": [0]
+        "Map the process on paper",
+        "Find the bottlenecks",
+        "Identify repetitive costs",
+        "Define the best practice",
+        "Automate with accuracy"
+      ]
     },
     {
       "videoShown": true,
-      "durationSeconds": 24
+      "durationSeconds": 4.53
+    },
+    {
+      "videoShown": true,
+      "durationSeconds": 4.22
     }
   ]
 }

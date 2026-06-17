@@ -8,13 +8,17 @@ import {
   transcribe,
   toCaptions,
 } from "@remotion/install-whisper-cpp";
-import { createTikTokStyleCaptions } from "@remotion/captions";
+import {
+  buildTokensFromCaptions,
+  extractCaptionsArray,
+  getProjectFolders,
+  getProjectPaths,
+  readJsonFile,
+  relativeToRoot,
+} from "./project-workflow.mjs";
 
-const ROOT_DIR = process.cwd();
-const PROJECTS_DIR = path.join(ROOT_DIR, "src", "projects");
-
-const WHISPER_CPP_VERSION = "1.5.5";
 const DEFAULT_MODEL = "medium.en";
+const WHISPER_CPP_VERSION = "1.5.5";
 
 const CACHE_ROOT = path.join(
   process.env.LOCALAPPDATA ||
@@ -24,110 +28,54 @@ const CACHE_ROOT = path.join(
 
 const WHISPER_PATH = path.join(CACHE_ROOT, "whisper.cpp");
 
-const { projectNameArg, model, mode } = parseArgs(process.argv.slice(2));
+const { projectNameArg, model, actionArg } = parseArgs(process.argv.slice(2));
 
 let projectName = projectNameArg;
-let projectDir;
-let videoPath;
-let audioPath;
-let captionsPath;
-let tokensPath;
+let action = actionArg;
+let projectPaths;
 
 main().catch((err) => {
   fail(err?.stack || err?.message || String(err));
 });
 
 async function main() {
-  logHeader("Project caption generation");
+  logHeader("Project media generation");
 
   if (!projectName) {
     projectName = await selectProjectInteractive();
   }
 
-  projectDir = path.join(PROJECTS_DIR, projectName);
-  videoPath = path.join(projectDir, "video.mp4");
-  audioPath = path.join(projectDir, "audio.wav");
-  captionsPath = path.join(projectDir, "captions.json");
-  tokensPath = path.join(projectDir, "tokens.json");
+  if (!action) {
+    action = await selectActionInteractive();
+  }
+
+  projectPaths = getProjectPaths(projectName);
 
   assertProjectExists();
 
-  if (mode === "tokens-only") {
-    const captions = readCaptionsJsonFromDisk();
-
-    if (!fs.existsSync(tokensPath)) {
-      createTokensJson(captions);
-    } else {
-      logSkip("tokens.json already exists");
-    }
-
-    console.log("");
-    console.log("DONE");
-    console.log(`Project:  ${projectName}`);
-    console.log(`Captions: ${relative(captionsPath)}`);
-    console.log(`Tokens:   ${relative(tokensPath)}`);
-
-    return;
+  switch (action) {
+    case "generate-audio":
+      await ensureAudio();
+      break;
+    case "generate-captions":
+      await ensureCaptions();
+      break;
+    case "generate-tokens":
+      await ensureTokens();
+      break;
+    case "full-pipeline":
+      await runFullPipeline();
+      break;
+    default:
+      fail(`Unknown action: ${action}`);
   }
 
-  if (fs.existsSync(captionsPath)) {
-    const captions = readCaptionsJsonFromDisk();
-
-    logSkip("captions.json already exists");
-
-    if (mode === "captions-and-tokens" && !fs.existsSync(tokensPath)) {
-      createTokensJson(captions);
-    } else if (mode === "captions-and-tokens") {
-      logSkip("tokens.json already exists");
-    }
-
-    console.log("");
-    console.log("DONE");
-    console.log(`Project:  ${projectName}`);
-    console.log(`Captions: ${relative(captionsPath)}`);
-    if (fs.existsSync(tokensPath)) {
-      console.log(`Tokens:   ${relative(tokensPath)}`);
-    }
-
-    return;
-  }
-
-  assertVideoExists();
-
-  if (!fs.existsSync(audioPath)) {
-    createAudioWav();
-  } else {
-    logSkip("audio.wav already exists");
-  }
-
-  await ensureWhisperInstalled();
-  await ensureWhisperModelDownloaded();
-
-  const captions = await ensureCaptionsJson();
-
-  if (mode === "captions-and-tokens" && !fs.existsSync(tokensPath)) {
-    createTokensJson(captions);
-  } else if (mode === "captions-and-tokens") {
-    logSkip("tokens.json already exists");
-  }
-
-  console.log("");
-  console.log("DONE");
-  console.log(`Project:  ${projectName}`);
-  console.log(`Video:    ${relative(videoPath)}`);
-  console.log(`Audio:    ${relative(audioPath)}`);
-  console.log(`Captions: ${relative(captionsPath)}`);
-  if (fs.existsSync(tokensPath)) {
-    console.log(`Tokens:   ${relative(tokensPath)}`);
-  }
-  console.log(`Whisper:  ${WHISPER_PATH}`);
-  console.log(`Model:    ${model}`);
+  printSummary();
 }
 
 function parseArgs(args) {
   let selectedModel = DEFAULT_MODEL;
-  let generateTokens = false;
-  let tokensOnly = false;
+  let selectedAction = null;
   const positional = [];
 
   for (let i = 0; i < args.length; i++) {
@@ -145,13 +93,15 @@ function parseArgs(args) {
       continue;
     }
 
-    if (arg === "--tokens") {
-      generateTokens = true;
-      continue;
-    }
+    if (arg === "--action" || arg === "-a") {
+      const next = args[i + 1];
 
-    if (arg === "--tokens-only") {
-      tokensOnly = true;
+      if (!next) {
+        fail("Missing action value after --action");
+      }
+
+      selectedAction = normalizeAction(next);
+      i++;
       continue;
     }
 
@@ -164,15 +114,46 @@ function parseArgs(args) {
     selectedModel = positional[1];
   }
 
-  if (generateTokens && tokensOnly) {
-    fail("Use either --tokens or --tokens-only, not both.");
+  return {
+    actionArg: selectedAction,
+    model: selectedModel,
+    projectNameArg: selectedProject,
+  };
+}
+
+function normalizeAction(value) {
+  const normalized = String(value).trim().toLowerCase();
+
+  if (normalized === "audio" || normalized === "generate-audio") {
+    return "generate-audio";
   }
 
-  return {
-    projectNameArg: selectedProject,
-    model: selectedModel,
-    mode: tokensOnly ? "tokens-only" : generateTokens ? "captions-and-tokens" : "captions-only",
-  };
+  if (
+    normalized === "captions" ||
+    normalized === "generate-captions"
+  ) {
+    return "generate-captions";
+  }
+
+  if (normalized === "tokens" || normalized === "generate-tokens") {
+    return "generate-tokens";
+  }
+
+  if (normalized === "full" || normalized === "full-pipeline") {
+    return "full-pipeline";
+  }
+
+  fail(
+    [
+      `Unknown action: ${value}`,
+      "",
+      "Expected one of:",
+      "  generate-audio",
+      "  generate-captions",
+      "  generate-tokens",
+      "  full-pipeline",
+    ].join("\n"),
+  );
 }
 
 async function selectProjectInteractive() {
@@ -183,8 +164,8 @@ async function selectProjectInteractive() {
       [
         "No project folders found.",
         "",
-        `Expected project folders inside:`,
-        `  ${PROJECTS_DIR}`,
+        "Expected project folders inside:",
+        `  ${path.join(process.cwd(), "src", "projects")}`,
       ].join("\n"),
     );
   }
@@ -194,7 +175,8 @@ async function selectProjectInteractive() {
     console.log("Available projects:");
 
     for (const project of projects) {
-      console.log(`- ${project.name}`);
+      const status = project.hasTemplate ? "" : " [missing template.json]";
+      console.log(`- ${project.name}${status}`);
     }
 
     fail(
@@ -221,7 +203,7 @@ async function selectProjectInteractive() {
 
       console.log("Select project");
       console.log("");
-      console.log("Use ↑ / ↓ then press Enter.");
+      console.log("Use Up / Down then press Enter.");
       console.log("");
 
       projects.forEach((project, index) => {
@@ -240,8 +222,6 @@ async function selectProjectInteractive() {
         );
       });
 
-      console.log("");
-      console.log(`Model: ${model}`);
       console.log("");
       console.log("Press Ctrl+C to cancel.");
     };
@@ -290,74 +270,245 @@ async function selectProjectInteractive() {
   });
 }
 
-function getProjectFolders() {
-  if (!fs.existsSync(PROJECTS_DIR)) {
+async function selectActionInteractive() {
+  const actions = [
+    {
+      description: "video.mp4 required",
+      label: "Generate audio",
+      value: "generate-audio",
+    },
+    {
+      description: "audio.wav required",
+      label: "Generate captions",
+      value: "generate-captions",
+    },
+    {
+      description: "captions.json required",
+      label: "Generate tokens",
+      value: "generate-tokens",
+    },
+    {
+      description: "video.mp4 required, generate all subsequent files",
+      label: "Full pipeline",
+      value: "full-pipeline",
+    },
+  ];
+
+  if (!process.stdin.isTTY || !process.stdin.setRawMode) {
     fail(
       [
-        "Projects directory not found.",
+        "Interactive action selection is not supported in this terminal.",
         "",
-        `Expected:`,
-        `  ${PROJECTS_DIR}`,
+        "Run with one of these flags instead:",
+        "  --action generate-audio",
+        "  --action generate-captions",
+        "  --action generate-tokens",
+        "  --action full-pipeline",
       ].join("\n"),
     );
   }
 
-  return fs
-    .readdirSync(PROJECTS_DIR, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => {
-      const folder = path.join(PROJECTS_DIR, entry.name);
+  let selectedIndex = actions.findIndex(
+    (actionItem) => actionItem.value === "full-pipeline",
+  );
 
-      return {
-        name: entry.name,
-        folder,
-        hasVideo: fs.existsSync(path.join(folder, "video.mp4")),
-        hasCaptions: fs.existsSync(path.join(folder, "captions.json")),
-        hasTokens: fs.existsSync(path.join(folder, "tokens.json")),
-        captionCount: countCaptions(path.join(folder, "captions.json")),
-        tokenCount: countTokens(path.join(folder, "tokens.json")),
-      };
-    })
-    .sort((a, b) => a.name.localeCompare(b.name));
+  if (selectedIndex < 0) {
+    selectedIndex = 0;
+  }
+
+  return new Promise((resolve) => {
+    readline.emitKeypressEvents(process.stdin);
+
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+
+    const render = () => {
+      console.clear();
+
+      console.log("Select action");
+      console.log("");
+      console.log("Use Up / Down then press Enter.");
+      console.log("");
+
+      actions.forEach((actionItem, index) => {
+        const isSelected = index === selectedIndex;
+        const prefix = isSelected ? ">" : " ";
+        const descriptionPrefix = isSelected ? "  " : " ";
+
+        console.log(`${prefix} ${actionItem.label}`);
+        console.log(`${descriptionPrefix}${actionItem.description}`);
+        console.log("");
+      });
+
+      console.log("Press Ctrl+C to cancel.");
+    };
+
+    const cleanup = () => {
+      process.stdin.setRawMode(false);
+      process.stdin.pause();
+      process.stdin.off("keypress", onKeypress);
+      console.clear();
+    };
+
+    const onKeypress = (_str, key) => {
+      if (key.ctrl && key.name === "c") {
+        cleanup();
+        process.exit(130);
+      }
+
+      if (key.name === "up") {
+        selectedIndex =
+          selectedIndex === 0 ? actions.length - 1 : selectedIndex - 1;
+        render();
+        return;
+      }
+
+      if (key.name === "down") {
+        selectedIndex =
+          selectedIndex === actions.length - 1 ? 0 : selectedIndex + 1;
+        render();
+        return;
+      }
+
+      if (key.name === "return") {
+        const selectedAction = actions[selectedIndex];
+
+        cleanup();
+
+        console.log(`Selected action: ${selectedAction.label}`);
+
+        resolve(selectedAction.value);
+      }
+    };
+
+    process.stdin.on("keypress", onKeypress);
+
+    render();
+  });
 }
 
 function assertProjectExists() {
-  if (!fs.existsSync(projectDir)) {
-    fail(`Project folder not found: ${projectDir}`);
+  if (!fs.existsSync(projectPaths.projectDir)) {
+    fail(`Project folder not found: ${projectPaths.projectDir}`);
   }
 
-  if (!fs.statSync(projectDir).isDirectory()) {
-    fail(`Project path exists but is not a folder: ${projectDir}`);
+  if (!fs.statSync(projectPaths.projectDir).isDirectory()) {
+    fail(`Project path exists but is not a folder: ${projectPaths.projectDir}`);
   }
 
-  logOk(`Project found: ${relative(projectDir)}`);
+  if (!fs.existsSync(projectPaths.templatePath)) {
+    fail(
+      [
+        "template.json not found in project folder.",
+        "",
+        "Expected:",
+        `  ${projectPaths.templatePath}`,
+      ].join("\n"),
+    );
+  }
+
+  logOk(`Project found: ${relativeToRoot(projectPaths.projectDir)}`);
+}
+
+async function ensureAudio() {
+  if (fs.existsSync(projectPaths.audioPath)) {
+    logSkip("audio.wav already exists");
+    return;
+  }
+
+  assertVideoExists();
+  createAudioWav();
+}
+
+async function ensureCaptions() {
+  if (fs.existsSync(projectPaths.captionsPath)) {
+    logSkip("captions.json already exists");
+    return;
+  }
+
+  if (!fs.existsSync(projectPaths.audioPath)) {
+    fail(
+      [
+        "audio.wav is required before generating captions.",
+        "",
+        "Missing:",
+        `  ${projectPaths.audioPath}`,
+        "",
+        "Choose Generate audio or Full pipeline first.",
+      ].join("\n"),
+    );
+  }
+
+  await ensureWhisperInstalled();
+  await ensureWhisperModelDownloaded();
+  await createCaptionsJson();
+}
+
+async function ensureTokens() {
+  if (fs.existsSync(projectPaths.tokensPath)) {
+    logSkip("tokens.json already exists");
+    return;
+  }
+
+  if (!fs.existsSync(projectPaths.captionsPath)) {
+    fail(
+      [
+        "captions.json is required before generating tokens.",
+        "",
+        "Missing:",
+        `  ${projectPaths.captionsPath}`,
+        "",
+        "Choose Generate captions or Full pipeline first.",
+      ].join("\n"),
+    );
+  }
+
+  createTokensJson(readCaptionsJson());
+}
+
+async function runFullPipeline() {
+  const needsVideo = !fs.existsSync(projectPaths.audioPath);
+  const needsCaptions = !fs.existsSync(projectPaths.captionsPath);
+  const needsTokens = !fs.existsSync(projectPaths.tokensPath);
+
+  if (needsVideo || needsCaptions || needsTokens) {
+    assertVideoExists();
+  }
+
+  if (needsVideo) {
+    createAudioWav();
+  } else {
+    logSkip("audio.wav already exists");
+  }
+
+  if (needsCaptions) {
+    await ensureWhisperInstalled();
+    await ensureWhisperModelDownloaded();
+    await createCaptionsJson();
+  } else {
+    logSkip("captions.json already exists");
+  }
+
+  if (needsTokens) {
+    createTokensJson(readCaptionsJson());
+  } else {
+    logSkip("tokens.json already exists");
+  }
 }
 
 function assertVideoExists() {
-  if (!fs.existsSync(videoPath)) {
+  if (!fs.existsSync(projectPaths.videoPath)) {
     fail(
       [
-        "video.mp4 not found in project folder.",
+        "video.mp4 is required for this step.",
         "",
-        "Expected:",
-        `  ${videoPath}`,
-        "",
-        "Put your source video here:",
-        `  src/projects/${projectName}/video.mp4`,
+        "Missing:",
+        `  ${projectPaths.videoPath}`,
       ].join("\n"),
     );
   }
 
   logOk("video.mp4 found");
-}
-
-function ensureCaptionsJson() {
-  if (fs.existsSync(captionsPath)) {
-    logSkip("captions.json already exists");
-    return readCaptionsJsonFromDisk();
-  }
-
-  return createCaptionsJson();
 }
 
 function createAudioWav() {
@@ -370,7 +521,7 @@ function createAudioWav() {
     [
       "-y",
       "-i",
-      videoPath,
+      projectPaths.videoPath,
       "-vn",
       "-ac",
       "1",
@@ -378,7 +529,7 @@ function createAudioWav() {
       "16000",
       "-sample_fmt",
       "s16",
-      audioPath,
+      projectPaths.audioPath,
     ],
     {
       stdio: "inherit",
@@ -390,7 +541,7 @@ function createAudioWav() {
     fail("FFmpeg failed while creating audio.wav");
   }
 
-  logOk(`Created ${relative(audioPath)}`);
+  logOk(`Created ${relativeToRoot(projectPaths.audioPath)}`);
 }
 
 async function ensureWhisperInstalled() {
@@ -444,11 +595,11 @@ async function ensureWhisperInstalled() {
 
 async function ensureWhisperModelDownloaded() {
   if (isWhisperModelDownloaded()) {
-    logSkip(`Whisper model already exists: ${model}`);
+    logSkip("Whisper model already exists");
     return;
   }
 
-  logStep(`Whisper model missing — downloading: ${model}`);
+  logStep("Whisper model missing — downloading");
 
   fs.mkdirSync(WHISPER_PATH, { recursive: true });
 
@@ -484,7 +635,7 @@ async function createCaptionsJson() {
   logStep("captions.json missing — transcribing audio");
 
   const whisperCppOutput = await transcribe({
-    inputPath: audioPath,
+    inputPath: projectPaths.audioPath,
     whisperPath: WHISPER_PATH,
     whisperCppVersion: WHISPER_CPP_VERSION,
     model,
@@ -501,90 +652,86 @@ async function createCaptionsJson() {
     fail("Transcription completed, but no captions were generated.");
   }
 
-  fs.writeFileSync(captionsPath, JSON.stringify(captions, null, 2));
+  fs.writeFileSync(projectPaths.captionsPath, JSON.stringify(captions, null, 2));
 
   logOk(
-    `Created ${relative(captionsPath)} with ${captions.length} caption tokens`,
+    `Created ${relativeToRoot(projectPaths.captionsPath)} with ${captions.length} caption tokens`,
   );
 
   return captions;
 }
 
-function createTokensJson(captions) {
-  logStep("tokens.json missing — creating TikTok-style token ranges");
-
-  const tokens = createTokensFromCaptions(captions);
-
-  if (!Array.isArray(tokens) || tokens.length === 0) {
-    fail("Captions were found, but no tokens could be generated.");
-  }
-
-  fs.writeFileSync(tokensPath, JSON.stringify(tokens, null, 2));
-
-  logOk(`Created ${relative(tokensPath)} with ${tokens.length} token ranges`);
-}
-
-function createTokensFromCaptions(captions) {
-  const pages = createTikTokStyleCaptions({
-    captions,
-    combineTokensWithinMilliseconds: 1_200,
-  }).pages;
-
-  return pages.map((page) => ({
-    text: page.text,
-    startMs: page.startMs,
-    endMs: Math.round(page.startMs + page.durationMs),
-  }));
-}
-
-function readCaptionsJsonFromDisk() {
-  if (!fs.existsSync(captionsPath)) {
-    fail(
-      [
-        "captions.json not found in project folder.",
-        "",
-        "Expected:",
-        `  ${captionsPath}`,
-        "",
-        "Generate captions first, then run this script again.",
-      ].join("\n"),
-    );
-  }
-
-  let json;
-
+function readCaptionsJson() {
   try {
-    const raw = fs.readFileSync(captionsPath, "utf8");
-    json = JSON.parse(raw);
+    const json = readJsonFile(projectPaths.captionsPath);
+    const captions = extractCaptionsArray(json);
+
+    if (!Array.isArray(captions)) {
+      fail(
+        [
+          "Invalid captions.json format.",
+          "",
+          "Expected either:",
+          "  Caption[]",
+          "",
+          "Or:",
+          '  { "captions": Caption[] }',
+        ].join("\n"),
+      );
+    }
+
+    return captions;
   } catch (error) {
     fail(
       [
         "Failed to read or parse captions.json.",
         "",
-        `File: ${captionsPath}`,
+        `File: ${projectPaths.captionsPath}`,
         "",
         error.message,
       ].join("\n"),
     );
   }
+}
 
-  const captions = extractCaptionsArray(json);
+function createTokensJson(captions) {
+  logStep("tokens.json missing — creating TikTok-style token ranges");
 
-  if (!Array.isArray(captions)) {
-    fail(
-      [
-        "Invalid captions.json format.",
-        "",
-        "Expected either:",
-        "  Caption[]",
-        "",
-        "Or:",
-        '  { "captions": Caption[] }',
-      ].join("\n"),
-    );
+  const tokens = buildTokensFromCaptions(captions);
+
+  if (!Array.isArray(tokens) || tokens.length === 0) {
+    fail("Captions were found, but no tokens could be generated.");
   }
 
-  return captions;
+  fs.writeFileSync(projectPaths.tokensPath, JSON.stringify(tokens, null, 2));
+
+  logOk(`Created ${relativeToRoot(projectPaths.tokensPath)} with ${tokens.length} token ranges`);
+}
+
+function printSummary() {
+  console.log("");
+  console.log("DONE");
+  console.log(`Project:  ${projectName}`);
+  console.log(`Action:   ${action}`);
+
+  if (fs.existsSync(projectPaths.videoPath)) {
+    console.log(`Video:    ${relativeToRoot(projectPaths.videoPath)}`);
+  }
+
+  if (fs.existsSync(projectPaths.audioPath)) {
+    console.log(`Audio:    ${relativeToRoot(projectPaths.audioPath)}`);
+  }
+
+  if (fs.existsSync(projectPaths.captionsPath)) {
+    console.log(`Captions: ${relativeToRoot(projectPaths.captionsPath)}`);
+  }
+
+  if (fs.existsSync(projectPaths.tokensPath)) {
+    console.log(`Tokens:   ${relativeToRoot(projectPaths.tokensPath)}`);
+  }
+
+  console.log(`Whisper:  ${WHISPER_PATH}`);
+  console.log(`Model:    ${model}`);
 }
 
 function isWhisperInstalled() {
@@ -609,62 +756,6 @@ function getModelPathCandidates() {
   ];
 }
 
-function countCaptions(captionsFile) {
-  if (!fs.existsSync(captionsFile)) {
-    return 0;
-  }
-
-  try {
-    const raw = fs.readFileSync(captionsFile, "utf8");
-    const json = JSON.parse(raw);
-    const captions = extractCaptionsArray(json);
-
-    return Array.isArray(captions) ? captions.length : 0;
-  } catch {
-    return 0;
-  }
-}
-
-function countTokens(tokensFile) {
-  if (!fs.existsSync(tokensFile)) {
-    return 0;
-  }
-
-  try {
-    const raw = fs.readFileSync(tokensFile, "utf8");
-    const json = JSON.parse(raw);
-    const tokens = extractTokensArray(json);
-
-    return Array.isArray(tokens) ? tokens.length : 0;
-  } catch {
-    return 0;
-  }
-}
-
-function extractCaptionsArray(json) {
-  if (Array.isArray(json)) {
-    return json;
-  }
-
-  if (json && Array.isArray(json.captions)) {
-    return json.captions;
-  }
-
-  return null;
-}
-
-function extractTokensArray(json) {
-  if (Array.isArray(json)) {
-    return json;
-  }
-
-  if (json && Array.isArray(json.tokens)) {
-    return json.tokens;
-  }
-
-  return null;
-}
-
 function isWhisperModelDownloaded() {
   return getModelPathCandidates().some((candidate) => fs.existsSync(candidate));
 }
@@ -687,10 +778,6 @@ function assertCommandAvailable(command) {
       ].join("\n"),
     );
   }
-}
-
-function relative(filePath) {
-  return path.relative(ROOT_DIR, filePath);
 }
 
 function logHeader(text) {

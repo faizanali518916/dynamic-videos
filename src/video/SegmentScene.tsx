@@ -5,7 +5,11 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { LAYOUT_SPECS, defaultTheme } from "../layoutCatalog";
+import {
+  ANIMATION_SAFE_ZONE_BOTTOM_PX,
+  LAYOUT_SPECS,
+  defaultTheme,
+} from "../layoutCatalog";
 import { SceneBackdrop } from "./scene/SceneBackdrop";
 import { SceneHeader } from "./scene/SceneHeader";
 import { renderLayout } from "./layouts/renderLayout";
@@ -65,7 +69,7 @@ export const SegmentScene = ({
       <SceneHeader theme={theme} />
       <section
         style={{
-          marginTop: 76,
+          marginTop: 66,
           position: "relative",
           zIndex: 2,
           ...enterStyle(reveal(frame), 18),
@@ -116,9 +120,11 @@ export const SegmentScene = ({
           alignItems: "center",
           display: "flex",
           flex: 1,
+          maxHeight: `calc(100% - ${ANIMATION_SAFE_ZONE_BOTTOM_PX}px)`,
           justifyContent: "center",
-          marginTop: 48,
+          marginTop: 34,
           minHeight: 0,
+          paddingBottom: ANIMATION_SAFE_ZONE_BOTTOM_PX,
           position: "relative",
           zIndex: 2,
         }}

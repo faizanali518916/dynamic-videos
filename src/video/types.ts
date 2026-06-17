@@ -1,13 +1,26 @@
 import type { CSSProperties } from "react";
-import type { Caption } from "@remotion/captions";
 import type {
   AnimationSegment,
   InfographicTemplate,
   Theme,
 } from "../layoutCatalog";
 
+export type TranscriptToken = {
+  fromMs: number;
+  text: string;
+  toMs: number;
+};
+
+export type TranscriptPage = {
+  durationMs: number;
+  endMs: number;
+  startMs: number;
+  text: string;
+  tokens: TranscriptToken[];
+};
+
 export type InfographicVideoProps = {
-  captions?: Caption[];
+  transcriptPages?: TranscriptPage[];
   template: InfographicTemplate;
   videoSrc?: string;
 };

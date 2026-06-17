@@ -1,32 +1,18 @@
-import { createTikTokStyleCaptions, type Caption } from "@remotion/captions";
-import { useMemo } from "react";
 import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { BRAND_COLORS, BRAND_FONTS } from "../brand";
+import { TEXT_BOTTOM_OFFSET_PX } from "../layoutCatalog";
+import type { TranscriptPage } from "./types";
 
 type CaptionsOverlayProps = {
-  captions: Caption[];
+  transcriptPages: TranscriptPage[];
 };
 
-const CAPTION_COMBINE_MS = 1_200;
-
-const normalizeCaptionText = (text: string): string =>
-  text.replace(/\s+/g, " ").trim();
-
-export const CaptionsOverlay = ({ captions }: CaptionsOverlayProps) => {
+export const CaptionsOverlay = ({ transcriptPages }: CaptionsOverlayProps) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const currentMs = (frame / fps) * 1000;
-  const pages = useMemo(
-    () =>
-      createTikTokStyleCaptions({
-        captions,
-        combineTokensWithinMilliseconds: CAPTION_COMBINE_MS,
-      }).pages,
-    [captions],
-  );
-  const page = pages.find(
-    ({ durationMs, startMs }) =>
-      currentMs >= startMs && currentMs < startMs + durationMs,
+  const page = transcriptPages.find(
+    ({ endMs, startMs }) => currentMs >= startMs && currentMs < endMs,
   );
 
   if (!page) {
@@ -47,7 +33,7 @@ export const CaptionsOverlay = ({ captions }: CaptionsOverlayProps) => {
     <div
       style={{
         alignItems: "center",
-        bottom: 172,
+        bottom: TEXT_BOTTOM_OFFSET_PX,
         display: "flex",
         justifyContent: "center",
         left: 62,
@@ -74,9 +60,8 @@ export const CaptionsOverlay = ({ captions }: CaptionsOverlayProps) => {
         }}
       >
         {page.tokens.map((token, index) => {
-          const isActive =
-            currentMs >= token.fromMs && currentMs <= token.toMs;
-          const text = normalizeCaptionText(token.text);
+          const isActive = currentMs >= token.fromMs && currentMs <= token.toMs;
+          const text = token.text;
 
           if (!text) {
             return null;
@@ -88,8 +73,8 @@ export const CaptionsOverlay = ({ captions }: CaptionsOverlayProps) => {
               style={{
                 color: isActive ? BRAND_COLORS.secondary : BRAND_COLORS.text,
                 display: "inline-block",
-                margin: "0 10px 10px",
                 transform: isActive ? "scale(1.08)" : "scale(1)",
+                whiteSpace: "pre-wrap",
               }}
             >
               {text}

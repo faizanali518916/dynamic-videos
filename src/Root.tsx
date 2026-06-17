@@ -1,10 +1,9 @@
 import "./index.css";
-import type { Caption } from "@remotion/captions";
 import { Composition } from "remotion";
 import { InfographicVideo } from "./Composition";
 import { TemplateBuilder } from "./TemplateBuilder";
-import captionsJson from "./projects/process-optimization/captions.json";
 import templateJson from "./projects/process-optimization/template.json";
+import tokensJson from "./projects/process-optimization/tokens.json";
 import sourceVideo from "./projects/process-optimization/video.mp4";
 import {
   FPS,
@@ -13,9 +12,10 @@ import {
   getTemplateDurationInFrames,
   type InfographicTemplate,
 } from "./layoutCatalog";
+import type { TranscriptPage } from "./video/types";
 
 const infographicTemplate = templateJson as InfographicTemplate;
-const captions = captionsJson as Caption[];
+const transcriptPages = tokensJson as TranscriptPage[];
 const BUILDER_WIDTH = 1600;
 const BUILDER_HEIGHT = 1200;
 
@@ -25,7 +25,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         component={InfographicVideo}
         defaultProps={{
-          captions,
+          transcriptPages,
           template: infographicTemplate,
           videoSrc: sourceVideo,
         }}

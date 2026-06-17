@@ -1,10 +1,12 @@
 import { BRAND_COLORS } from "./brand";
 
+export const FPS = 30;
 export const VIDEO_WIDTH = 1080;
 export const VIDEO_HEIGHT = 1920;
-export const FPS = 30;
-export const INTRO_DURATION_SECONDS = 4;
 export const OUTRO_DURATION_SECONDS = 8;
+export const TEXT_BOTTOM_OFFSET_PX = 264;
+export const INTRO_HOOK_DURATION_SECONDS = 4;
+export const ANIMATION_SAFE_ZONE_BOTTOM_PX = 300;
 
 export type LayoutKind =
   | "flowchart"
@@ -259,11 +261,9 @@ export const getTemplateDurationInFrames = (
     (sum, segment) => sum + getSegmentDurationInFrames(segment, fps),
     0,
   );
-  const introFrames =
-    template.intro === true ? INTRO_DURATION_SECONDS * fps : 0;
   const outroFrames =
     template.outro === true ? OUTRO_DURATION_SECONDS * fps : 0;
-  const frames = segmentFrames + introFrames + outroFrames;
+  const frames = segmentFrames + outroFrames;
 
   return Math.max(frames, fps * 5);
 };
