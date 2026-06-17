@@ -43,9 +43,7 @@ export type AnimationSegment = {
   title: string;
   durationSeconds?: number;
   subtitle?: string;
-  body?: string;
   metric?: string;
-  footnote?: string;
   accent?: string;
   items?: string[];
   values?: number[];

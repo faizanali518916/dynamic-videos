@@ -4,6 +4,7 @@ export const BRAND_COLORS = {
   dark: "#131532",
   surface: "#1b1e46",
   text: "#f7f8ff",
+  highlight: "#af74ff",
   muted: "#c9cdfd",
 } as const;
 

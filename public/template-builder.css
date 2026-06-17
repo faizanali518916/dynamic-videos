@@ -2,6 +2,18 @@
 * {
   box-sizing: border-box;
 }
+@font-face {
+  font-family: "Gued";
+  font-style: normal;
+  font-weight: 400;
+  src: url(./gued.otf) format("opentype");
+}
+@font-face {
+  font-family: "Gued";
+  font-style: normal;
+  font-weight: 700 950;
+  src: url(./gued-bold.otf) format("opentype");
+}
 body {
   margin: 0;
 }
@@ -35,13 +47,47 @@ body {
 }
 .builder-grid {
   display: grid;
-  gap: 36px;
-  grid-template-columns: minmax(0, 1fr) minmax(380px, 440px);
-  height: 100%;
-  padding: 54px;
+  gap: 24px;
+  grid-template-columns: minmax(520px, 1fr) minmax(360px, 460px);
+  min-height: calc(100vh - 116px);
+  padding: 34px;
+  padding-top: 18px;
+}
+.project-switcher {
+  align-items: center;
+  background: rgba(27, 30, 70, 0.88);
+  border: 1px solid rgba(160, 166, 252, 0.22);
+  border-radius: 8px;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin: 24px 34px 0;
+  padding: 16px 18px;
+}
+.project-switcher .builder-field {
+  margin-top: 0;
+  max-width: 360px;
+  width: 100%;
+}
+.project-switcher p,
+.project-error,
+.project-loading {
+  color: #c9cdfd;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.35;
+  margin: 0;
+}
+.project-error,
+.project-loading {
+  margin: 24px 34px;
+}
+.project-error {
+  color: #ffd7cc;
 }
 .builder-main,
-.json-panel {
+.json-panel,
+.preview-panel {
   min-height: 0;
   overflow: auto;
 }
@@ -98,11 +144,13 @@ body {
   margin-bottom: 16px;
   margin-top: 22px;
 }
-.json-panel-head {
+.json-panel-head,
+.preview-panel-head {
   margin-top: 0;
 }
 .segments-header h2,
-.json-panel h2 {
+.json-panel h2,
+.preview-panel h2 {
   font-size: 25px;
 }
 .builder-field {
@@ -135,6 +183,12 @@ body {
   outline: none;
   padding: 14px 16px;
   width: 100%;
+}
+.builder-field select option {
+  color: #11142e;
+}
+.builder-field select {
+  color: #f7f8ff;
 }
 .builder-field textarea,
 .json-panel textarea {
@@ -237,8 +291,12 @@ body {
   flex-direction: column;
   padding: 24px;
 }
-.json-panel-head {
+.json-panel-head,
+.preview-panel-head {
+  align-items: center;
+  display: flex;
   flex: 0 0 auto;
+  justify-content: space-between;
   margin-top: 0;
 }
 .json-panel textarea {
@@ -252,5 +310,92 @@ body {
   margin-top: 18px;
   min-height: 0;
   white-space: pre;
+}
+.json-panel textarea[aria-invalid=true] {
+  border-color: rgba(255, 126, 94, 0.75);
+}
+.json-error,
+.render-message {
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.35;
+  margin: 14px 0 0;
+  padding: 12px 14px;
+}
+.json-error,
+.render-message.error {
+  background: rgba(255, 126, 94, 0.12);
+  color: #ffd7cc;
+}
+.render-message.queued {
+  background: rgba(110, 231, 183, 0.12);
+  color: #b8f7de;
+}
+.preview-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.preview-panel-head span {
+  color: #c9cdfd;
+  font-size: 15px;
+  font-weight: 850;
+}
+.preview-frame {
+  align-items: center;
+  aspect-ratio: 9 / 16;
+  background: #070817;
+  border: 1px solid rgba(160, 166, 252, 0.22);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+}
+.render-card {
+  background: rgba(27, 30, 70, 0.78);
+  border: 1px solid rgba(160, 166, 252, 0.22);
+  border-radius: 8px;
+  padding: 18px;
+}
+.render-card .builder-field {
+  margin-top: 0;
+}
+.render-card .builder-primary {
+  margin-top: 14px;
+  width: 100%;
+}
+.preview-panel .json-panel {
+  flex: 1;
+  min-height: 520px;
+}
+.builder-primary:disabled {
+  cursor: default;
+  opacity: 0.48;
+}
+@media (max-width: 1380px) {
+  .builder-grid {
+    grid-template-columns: minmax(460px, 1fr) minmax(320px, 420px);
+  }
+}
+@media (max-width: 920px) {
+  .builder-grid {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+  .project-switcher {
+    align-items: stretch;
+    flex-direction: column;
+    margin: 18px 18px 0;
+  }
+  .builder-settings,
+  .segment-fields,
+  .theme-grid {
+    grid-template-columns: 1fr;
+  }
+  .title-field-wide {
+    grid-column: auto;
+  }
 }
 /*# sourceMappingURL=template-builder.css.map */

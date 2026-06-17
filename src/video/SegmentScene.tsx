@@ -7,7 +7,6 @@ import {
 } from "remotion";
 import {
   ANIMATION_SAFE_ZONE_BOTTOM_PX,
-  LAYOUT_SPECS,
   defaultTheme,
 } from "../layoutCatalog";
 import { SceneBackdrop } from "./scene/SceneBackdrop";
@@ -75,25 +74,13 @@ export const SegmentScene = ({
           ...enterStyle(reveal(frame), 18),
         }}
       >
-        <div
-          style={{
-            color: accent,
-            fontSize: 25,
-            fontFamily: subheadingTextStyle.fontFamily,
-            fontWeight: 900,
-            letterSpacing: 0,
-            textTransform: "uppercase",
-          }}
-        >
-          {LAYOUT_SPECS[segment.layout].label}
-        </div>
         <h1
           style={{
             ...headingTextStyle,
             fontSize: 78,
             fontWeight: 950,
             lineHeight: 0.95,
-            margin: "18px 0 0",
+            margin: 0,
             maxWidth: 920,
           }}
         >

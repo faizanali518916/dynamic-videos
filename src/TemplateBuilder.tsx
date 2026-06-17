@@ -8,6 +8,9 @@ type TemplateBuilderProps = {
 
 export const TemplateBuilder = ({ initialTemplate }: TemplateBuilderProps) => (
   <AbsoluteFill className="builder-shell">
-    <TemplateBuilderApp initialTemplate={initialTemplate} />
+    <TemplateBuilderApp
+      initialTemplate={initialTemplate}
+      projectName="process-optimization"
+    />
   </AbsoluteFill>
 );

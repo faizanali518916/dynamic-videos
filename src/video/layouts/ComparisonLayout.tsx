@@ -1,4 +1,3 @@
-import { Arrow } from "../primitives/Arrow";
 import { GlowCard } from "../primitives/GlowCard";
 import { HighlightTag } from "../primitives/HighlightTag";
 import type { LayoutProps } from "../types";
@@ -72,18 +71,6 @@ export const ComparisonLayout = ({
                   ...enterStyle(reveal(frame, itemIndex + 2), 22),
                 }}
               >
-                {columnIndex === 1 ? (
-                  <Arrow
-                    accent={column.color}
-                    opacity={0.7}
-                    style={{
-                      position: "absolute",
-                      right: 18,
-                      top: 18,
-                      transform: "scale(0.55)",
-                    }}
-                  />
-                ) : null}
                 {item}
               </div>
             ))}

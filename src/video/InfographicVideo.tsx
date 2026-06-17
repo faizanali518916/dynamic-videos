@@ -1,5 +1,7 @@
 import {
   AbsoluteFill,
+  Audio,
+  Html5Video,
   OffthreadVideo,
   Sequence,
   staticFile,
@@ -26,6 +28,8 @@ type SegmentRange = {
 };
 
 type VideoOnlySceneProps = {
+  mediaMode: "preview" | "render";
+  muted?: boolean;
   startFrom: number;
   videoSrc: string;
 };
@@ -72,12 +76,40 @@ const isVideoVisibleAtFrame = (
       frame < from + durationInFrames,
   );
 
-const VideoOnlyScene = ({ startFrom, videoSrc }: VideoOnlySceneProps) => (
-  <AbsoluteFill style={{ background: "#000000" }}>
-    <OffthreadVideo
+const SyncedVideo = ({
+  mediaMode,
+  muted = false,
+  startFrom,
+  videoSrc,
+}: VideoOnlySceneProps) =>
+  mediaMode === "preview" ? (
+    <Html5Video
+      muted={muted}
       src={videoSrc}
       startFrom={startFrom}
       style={videoFillStyle}
+    />
+  ) : (
+    <OffthreadVideo
+      muted={muted}
+      src={videoSrc}
+      startFrom={startFrom}
+      style={videoFillStyle}
+    />
+  );
+
+const VideoOnlyScene = ({
+  mediaMode,
+  muted,
+  startFrom,
+  videoSrc,
+}: VideoOnlySceneProps) => (
+  <AbsoluteFill style={{ background: "#000000" }}>
+    <SyncedVideo
+      mediaMode={mediaMode}
+      muted={muted}
+      startFrom={startFrom}
+      videoSrc={videoSrc}
     />
   </AbsoluteFill>
 );
@@ -86,6 +118,7 @@ const getOutroDurationInFrames = (fps: number): number =>
   Math.round(OUTRO_DURATION_SECONDS * fps);
 
 export const InfographicVideo = ({
+  mediaMode = "render",
   transcriptPages = [],
   template,
   videoSrc,
@@ -114,6 +147,7 @@ export const InfographicVideo = ({
     Boolean(videoSrc) &&
     isVideoBased &&
     isVideoVisibleAtFrame(segmentRanges, frame);
+  const sourceVideoOpacity = mediaMode === "preview" ? 1 : showVideoLayer ? 1 : 0;
 
   return (
     <AbsoluteFill
@@ -124,14 +158,22 @@ export const InfographicVideo = ({
       }}
     >
       {videoSrc && isVideoBased ? (
-        <AbsoluteFill
-          style={{
-            background: "#000000",
-            opacity: showVideoLayer ? 1 : 0,
-          }}
-        >
-          <OffthreadVideo src={videoSrc} style={videoFillStyle} />
-        </AbsoluteFill>
+        <>
+          <AbsoluteFill
+            style={{
+              background: "#000000",
+              opacity: sourceVideoOpacity,
+            }}
+          >
+            <SyncedVideo
+              mediaMode={mediaMode}
+              muted
+              startFrom={0}
+              videoSrc={videoSrc}
+            />
+          </AbsoluteFill>
+          <Audio src={videoSrc} />
+        </>
       ) : null}
 
       {segmentRanges.map(({ durationInFrames, from, segment }, index) => {
@@ -146,7 +188,11 @@ export const InfographicVideo = ({
               from={from}
               key={getSegmentKey(segment, index)}
             >
-              <VideoOnlyScene startFrom={from} videoSrc={videoSrc} />
+              <VideoOnlyScene
+                mediaMode={mediaMode}
+                startFrom={from}
+                videoSrc={videoSrc}
+              />
             </Sequence>
           );
         }
@@ -173,7 +219,11 @@ export const InfographicVideo = ({
           durationInFrames={outroDurationInFrames}
           from={segmentEndFrame}
         >
-          <VideoOnlyScene startFrom={0} videoSrc={staticFile("outro.mp4")} />
+          <VideoOnlyScene
+            mediaMode={mediaMode}
+            startFrom={0}
+            videoSrc={staticFile("outro.mp4")}
+          />
         </Sequence>
       ) : null}
 

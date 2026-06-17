@@ -1,6 +1,5 @@
 {
   "title": "What is Process Optimization?",
-  "hookText": "Your AI is not failing, your operations are.",
   "intro": true,
   "outro": true,
   "videoBased": true,
@@ -15,6 +14,7 @@
     "text": "#FFFFFF",
     "muted": "#C7CBFF"
   },
+  "hookText": "Your AI is not failing, your operations are.",
   "segments": [
     {
       "videoShown": true,
@@ -26,16 +26,15 @@
       "title": "It Is Not the Market",
       "durationSeconds": 4.41,
       "subtitle": "The real issue is the mess underneath the business.",
-      "body": "Smart businesses often fail because their operations cannot support scale.",
       "metric": "Hidden operational mess",
-      "footnote": "Product and market are not always the root cause.",
       "accent": "#606bfa",
       "items": [
         "Weak workflows",
         "Scattered execution",
         "Unclear systems",
         "Broken operations"
-      ]
+      ],
+      "values": [68, 77, 81, 94]
     },
     {
       "videoShown": true,
@@ -47,7 +46,6 @@
       "title": "AI Cannot Fix Bad Habits",
       "durationSeconds": 6.51,
       "subtitle": "AI is useful, but it cannot repair a broken process by itself.",
-      "body": "If the foundation is messy, AI can multiply the same mistakes faster.",
       "accent": "#a0a6fc",
       "items": [
         "Looks like: AI problem",
@@ -56,7 +54,8 @@
         "Actually: Workflow gap",
         "Looks like: Automation",
         "Actually: Mess scaled faster"
-      ]
+      ],
+      "values": [0]
     },
     {
       "videoShown": true,
@@ -68,7 +67,7 @@
       "title": "Where the Mess Comes From",
       "durationSeconds": 7.42,
       "subtitle": "Operational gaps usually come from disconnected ways of working.",
-      "body": "The business slows down when tools, people, and processes do not align.",
+      "metric": "Chaos Sources",
       "accent": "#606bfa",
       "items": [
         "Scattered tools",
@@ -77,7 +76,8 @@
         "Manual handoffs",
         "Repeated work",
         "Unclear ownership"
-      ]
+      ],
+      "values": [0]
     },
     {
       "videoShown": true,
@@ -89,7 +89,6 @@
       "title": "Process Optimization",
       "durationSeconds": 6.76,
       "subtitle": "Simple meaning: fix how work gets done.",
-      "body": "Before adding more automation, the process itself needs to be cleaned and improved.",
       "accent": "#a0a6fc",
       "items": [
         "Fix the workflow",
@@ -97,7 +96,8 @@
         "Remove unnecessary steps",
         "Standardize execution",
         "Prepare for scale"
-      ]
+      ],
+      "values": [0]
     },
     {
       "videoShown": true,
@@ -109,7 +109,6 @@
       "title": "How SPCTEK AI Fixes It",
       "durationSeconds": 9.02,
       "subtitle": "We map the process first, then automate the best practice.",
-      "body": "The goal is not to automate everything. The goal is to automate the right way of working.",
       "accent": "#606bfa",
       "items": [
         "Map the process on paper",
@@ -117,7 +116,8 @@
         "Identify repetitive costs",
         "Define the best practice",
         "Automate with accuracy"
-      ]
+      ],
+      "values": [0]
     },
     {
       "videoShown": true,

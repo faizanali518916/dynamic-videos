@@ -1,10 +1,10 @@
 import { GlowCard } from "../primitives/GlowCard";
-import { MetricBadge } from "../primitives/MetricBadge";
 import type { LayoutProps } from "../types";
 import {
   ensureItems,
   ensureValues,
   enterStyle,
+  headingTextStyle,
   reveal,
   subheadingTextStyle,
   vividGradient,
@@ -20,7 +20,7 @@ export const StatsLayout = ({ accent, frame, segment, theme }: LayoutProps) => {
       style={{
         display: "grid",
         gap: 24,
-        gridTemplateRows: "310px 1fr",
+        gridTemplateRows: "260px 1fr",
         width: "100%",
       }}
     >
@@ -30,18 +30,24 @@ export const StatsLayout = ({ accent, frame, segment, theme }: LayoutProps) => {
         theme={theme}
         style={{ padding: 32 }}
       >
-        <MetricBadge
-          accent={accent}
-          metric={segment.metric ?? "84%"}
-          theme={theme}
-        />
+        <div
+          style={{
+            ...headingTextStyle,
+            color: accent,
+            fontSize: 76,
+            fontWeight: 950,
+            lineHeight: 0.95,
+          }}
+        >
+          {segment.metric ?? `${values[0]}%`}
+        </div>
         <div
           style={{
             background: withAlpha(accent, 0.16),
             borderRadius: 999,
             bottom: 42,
             height: 26,
-            left: 360,
+            left: 44,
             overflow: "hidden",
             position: "absolute",
             right: 44,

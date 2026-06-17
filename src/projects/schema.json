@@ -4,7 +4,7 @@
     "Use one clear idea per segment.",
     "Keep titles short and direct.",
     "Use subtitles for the interpretation, not the same words as the title.",
-    "Use body text for the explanation and items for the supporting points.",
+    "Use items for the supporting points.",
     "Prefer 3 to 6 items unless the layout specifically suggests otherwise.",
     "Use values only when the layout needs numeric emphasis or a data comparison.",
     "Use videoShown true only when the original source video should play instead of an animated layout.",
@@ -38,9 +38,7 @@
         "title": "string",
         "durationSeconds": 5,
         "subtitle": "string",
-        "body": "string",
         "metric": "string",
-        "footnote": "string",
         "accent": "string",
         "items": ["string"],
         "values": [0]
@@ -132,7 +130,7 @@
       "useWhen": "A segment should land a few punchy metrics or evidence points instead of a process.",
       "recommendedItems": 4,
       "durationSeconds": 5,
-      "fieldFocus": ["title", "items", "metric", "footnote"],
+      "fieldFocus": ["title", "items", "metric"],
       "notes": "Use short stat-style statements. The visual emphasis is on the numbers or the punchline."
     },
     {
@@ -142,7 +140,7 @@
       "useWhen": "The transcript explains how work moves through stages or how a system is improved.",
       "recommendedItems": 5,
       "durationSeconds": 6,
-      "fieldFocus": ["title", "items", "body", "subtitle"],
+      "fieldFocus": ["title", "items", "subtitle"],
       "notes": "This is the best default for operational or procedural storytelling."
     },
     {

@@ -1,0 +1,35 @@
+{
+  "title": "What is Process Optimization?",
+  "hookText": "Your AI is not failing, your operations are.",
+  "intro": false,
+  "outro": false,
+  "videoBased": false,
+  "caption": false,
+  "theme": {
+    "background": "#131532",
+    "surface": "#1B1E45",
+    "primary": "#606bfa",
+    "secondary": "#a0a6fc",
+    "dark": "#131532",
+    "accent": "#a0a6fc",
+    "text": "#FFFFFF",
+    "muted": "#C7CBFF"
+  },
+  "segments": [
+    {
+      "videoShown": false,
+      "layout": "stats",
+      "title": "It Is Not the Market",
+      "durationSeconds": 4.41,
+      "subtitle": "The real issue is the mess underneath the business.",
+      "metric": "Hidden operational mess",
+      "accent": "#606bfa",
+      "items": [
+        "Weak workflows",
+        "Scattered execution",
+        "Unclear systems",
+        "Broken operations"
+      ]
+    }
+  ]
+}

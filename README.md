@@ -11,15 +11,15 @@
 
 This project renders a portrait infographic video from a project folder under
 `src/projects`.
-Use the `TemplateBuilder` composition in Remotion Studio to build or reorder
-segments, copy the generated JSON, paste it into the active project's
-`template.json`, then preview or render the `InfographicVideo` composition.
+Use the standalone web builder to edit the form or JSON, preview the video, and
+submit an async render request. Users do not need to open the codebase or paste
+JSON into source files.
 
 Each video project lives in `src/projects/<project-name>/` and contains:
 
 - `template.json` for the Remotion template data
 - `video.mp4` for the source video
-- `transcript.json` for on-screen captions
+- `tokens.json` for word-level on-screen captions
 
 The current project is `src/projects/process-optimization/`.
 
@@ -58,9 +58,45 @@ Scenes with `videoShown: true` show the source video and only need
 `durationSeconds`; scenes with `videoShown: false` hide the source video and
 render the animation layout while the source audio keeps playing.
 
-When `intro` is true, the render starts with a short hook scene using
-`hookText`. When `outro` is true, the render ends with `public/outro.mp4`.
-`caption` can only be enabled when `videoBased` is true.
+When `intro` is true, `hookText` appears as an overlay at the start of the
+video without adding duration. Captions start after the intro overlay finishes.
+When `outro` is true, the render ends with `public/outro.mp4`. `caption` can
+only be enabled when `videoBased` is true.
+
+## Web builder
+
+The builder is the user-facing app. It has a form, an editable JSON panel, a
+live Remotion Player preview, and an email field for render delivery.
+
+```console
+npm run web
+```
+
+Open `http://localhost:4173`. The current JSON in the browser is the source of
+truth for both the preview and the render request.
+
+Submitting a render returns immediately. The request is stored as a JSON job in
+`.render-jobs/queued`, then the worker renders the MP4, uploads it to Google
+Drive when credentials are configured, and sends the Drive link by email.
+
+If Google credentials are not configured, completed MP4s stay in
+`.render-jobs/output` and the email body is written to
+`.render-jobs/notifications`.
+
+## Render worker
+
+The web server wakes the worker for each submitted job. You can also keep a
+worker running explicitly:
+
+```console
+npm run worker
+```
+
+The app is database-free: queued, completed, failed, output, and notification
+records are plain files under `.render-jobs`.
+
+Copy `.env.example` to `.env` for the production server environment. Drive and
+Gmail use Google OAuth credentials with `drive.file` and `gmail.send` scopes.
 
 ## Commands
 
@@ -70,7 +106,7 @@ When `intro` is true, the render starts with a short hook scene using
 npm i
 ```
 
-**Start Preview**
+**Start Remotion Studio**
 
 ```console
 npm run dev

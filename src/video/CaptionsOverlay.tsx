@@ -47,7 +47,7 @@ export const CaptionsOverlay = ({ transcriptPages }: CaptionsOverlayProps) => {
       <div
         style={{
           color: BRAND_COLORS.text,
-          fontFamily: BRAND_FONTS.subheading,
+          fontFamily: BRAND_FONTS.heading,
           fontSize: 62,
           fontWeight: 950,
           letterSpacing: 0,
@@ -56,7 +56,6 @@ export const CaptionsOverlay = ({ transcriptPages }: CaptionsOverlayProps) => {
           textAlign: "center",
           textShadow:
             "0 5px 0 rgba(0, 0, 0, 0.64), 0 12px 28px rgba(0, 0, 0, 0.42)",
-          textTransform: "uppercase",
         }}
       >
         {page.tokens.map((token, index) => {
@@ -71,9 +70,9 @@ export const CaptionsOverlay = ({ transcriptPages }: CaptionsOverlayProps) => {
             <span
               key={`${token.fromMs}-${token.toMs}-${index}`}
               style={{
-                color: isActive ? BRAND_COLORS.secondary : BRAND_COLORS.text,
+                color: isActive ? BRAND_COLORS.highlight : BRAND_COLORS.text,
                 display: "inline-block",
-                transform: isActive ? "scale(1.08)" : "scale(1)",
+                transform: isActive ? "scale(1)" : "scale(1)",
                 whiteSpace: "pre-wrap",
               }}
             >

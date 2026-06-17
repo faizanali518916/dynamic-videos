@@ -6,9 +6,12 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@remotion/bundler": "4.0.477",
     "@remotion/captions": "4.0.477",
     "@remotion/cli": "4.0.477",
     "@remotion/install-whisper-cpp": "4.0.477",
+    "@remotion/player": "4.0.477",
+    "@remotion/renderer": "4.0.477",
     "@remotion/tailwind-v4": "4.0.477",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -24,13 +27,15 @@
     "typescript": "5.9.3"
   },
   "scripts": {
-    "dev": "node scripts/preflight-dev.mjs && node ./node_modules/@remotion/cli/remotion-cli.js studio src/index.ts",
-    "render": "node ./node_modules/@remotion/cli/remotion-cli.js render src/index.ts InfographicVideo out/infographic.mp4",
-    "still": "node ./node_modules/@remotion/cli/remotion-cli.js still src/index.ts InfographicVideo out/preview.png --frame=35",
-    "build:builder": "node scripts/build-template-builder.mjs",
-    "build": "node ./node_modules/@remotion/cli/remotion-cli.js bundle src/index.ts",
+    "dev": "node scripts/generate-project-registry.mjs && node scripts/preflight-dev.mjs && node ./node_modules/@remotion/cli/remotion-cli.js studio src/index.ts",
+    "render": "node scripts/generate-project-registry.mjs && node ./node_modules/@remotion/cli/remotion-cli.js render src/index.ts process-optimization out/infographic.mp4",
+    "still": "node scripts/generate-project-registry.mjs && node ./node_modules/@remotion/cli/remotion-cli.js still src/index.ts process-optimization out/preview.png --frame=35",
+    "build:builder": "node scripts/generate-project-registry.mjs && node scripts/build-template-builder.mjs",
+    "build": "node scripts/generate-project-registry.mjs && node ./node_modules/@remotion/cli/remotion-cli.js bundle src/index.ts",
+    "web": "npm run build:builder && node scripts/web-server.mjs",
     "transcript": "node ./scripts/print-project-transcript.mjs",
     "caption": "node ./scripts/generate-project-captions.mjs",
+    "worker": "node scripts/generate-project-registry.mjs && node scripts/render-worker.mjs --watch",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
   },

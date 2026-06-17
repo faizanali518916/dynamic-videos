@@ -200,28 +200,6 @@ export const SegmentEditor = ({
                 value={segment.itemsText}
               />
             </label>
-
-            <label className="builder-field wide">
-              <span>Body</span>
-              <textarea
-                onChange={(event) =>
-                  onUpdate(index, "body", event.target.value)
-                }
-                rows={3}
-                value={segment.body}
-              />
-            </label>
-
-            <label className="builder-field wide">
-              <span>Footnote</span>
-              <input
-                onChange={(event) =>
-                  onUpdate(index, "footnote", event.target.value)
-                }
-                type="text"
-                value={segment.footnote}
-              />
-            </label>
           </>
         )}
       </div>

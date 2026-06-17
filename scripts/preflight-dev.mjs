@@ -1,45 +1,48 @@
 import fs from "node:fs";
-import { getProjectPaths, readJsonFile, relativeToRoot } from "./project-workflow.mjs";
-
-const PROJECT_NAME = "process-optimization";
-const paths = getProjectPaths(PROJECT_NAME);
+import { getProjectFolders, readJsonFile, relativeToRoot } from "./project-workflow.mjs";
 
 async function main() {
-  assertFileExists(paths.templatePath, "template.json");
+  const projects = getProjectFolders().filter(({ hasTemplate }) => hasTemplate);
 
-  let template;
-
-  try {
-    template = readJsonFile(paths.templatePath);
-  } catch (error) {
-    fail(
-      [
-        "Failed to read or parse template.json.",
-        "",
-        `File: ${paths.templatePath}`,
-        "",
-        error.message,
-      ].join("\n"),
-    );
+  if (projects.length === 0) {
+    fail("No project folders with template.json were found in src/projects.");
   }
 
-  if (template && template.videoBased === true) {
-    assertFileExists(
-      paths.videoPath,
-      "video.mp4 is required because template.videoBased is true.",
-    );
+  for (const paths of projects) {
+    assertFileExists(paths.templatePath, "template.json");
+
+    let template;
+
+    try {
+      template = readJsonFile(paths.templatePath);
+    } catch (error) {
+      fail(
+        [
+          "Failed to read or parse template.json.",
+          "",
+          `File: ${paths.templatePath}`,
+          "",
+          error.message,
+        ].join("\n"),
+      );
+    }
+
+    if (template && template.videoBased === true) {
+      assertFileExists(
+        paths.videoPath,
+        `${paths.name}: video.mp4 is required because template.videoBased is true.`,
+      );
+    }
+
+    if (template && template.caption === true) {
+      assertFileExists(
+        paths.tokensPath,
+        `${paths.name}: tokens.json is required because template.caption is true.`,
+      );
+    }
   }
 
-  if (template && template.caption === true) {
-    assertFileExists(
-      paths.tokensPath,
-      "tokens.json is required because template.caption is true.",
-    );
-  }
-
-  console.log(
-    `Preflight OK: ${relativeToRoot(paths.templatePath)} is ready for dev.`,
-  );
+  console.log(`Preflight OK: ${projects.length} project(s) ready for dev.`);
 }
 
 main().catch((err) => {

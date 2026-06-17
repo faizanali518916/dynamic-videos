@@ -1,5 +1,4 @@
 import { GlowCard } from "../primitives/GlowCard";
-import { MetricBadge } from "../primitives/MetricBadge";
 import type { LayoutProps } from "../types";
 import {
   drift,
@@ -46,20 +45,43 @@ export const RadialLayout = ({
         }}
       />
 
-      <MetricBadge
+      <GlowCard
         accent={accent}
-        label="center"
-        metric={segment.metric ?? "Core"}
+        shine={reveal(frame)}
         theme={theme}
         style={{
+          alignItems: "center",
+          display: "flex",
+          height: 176,
+          justifyContent: "center",
           left: "50%",
-          minWidth: 290,
+          padding: 22,
           position: "absolute",
+          textAlign: "center",
           top: "50%",
           transform: `translate(-50%, -50%) rotate(${drift(frame, 2, 80)}deg)`,
+          width: 290,
           zIndex: 3,
         }}
-      />
+      >
+        <div
+          style={{
+            ...headingTextStyle,
+            alignItems: "center",
+            color: accent,
+            display: "flex",
+            fontSize: 54,
+            fontWeight: 950,
+            height: "100%",
+            justifyContent: "center",
+            lineHeight: 0.95,
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          {segment.metric ?? "Core"}
+        </div>
+      </GlowCard>
 
       {items.map((item, itemIndex) => {
         const baseAngle =
@@ -80,8 +102,8 @@ export const RadialLayout = ({
             style={{
               alignItems: "center",
               display: "flex",
-              fontSize: 28,
-              fontWeight: 900,
+              fontSize: 31,
+              fontWeight: 950,
               height: 136,
               justifyContent: "center",
               left: "50%",
@@ -100,7 +122,19 @@ export const RadialLayout = ({
               ...headingTextStyle,
             }}
           >
-            <div style={{ color: theme.text }}>{item}</div>
+            <div
+              style={{
+                color: theme.text,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                textAlign: "center",
+                width: "100%",
+              }}
+            >
+              {item}
+            </div>
           </GlowCard>
         );
       })}

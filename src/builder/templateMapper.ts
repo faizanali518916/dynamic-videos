@@ -25,9 +25,7 @@ export const toFormSegment = (segment: InfographicSegment): FormSegment => {
   if (isVideoShownSegment(segment)) {
     return {
       accent: "",
-      body: "",
       durationSeconds: String(getSegmentDurationSeconds(segment)),
-      footnote: "",
       itemsText: "",
       layout: defaultLayout,
       metric: "",
@@ -40,9 +38,7 @@ export const toFormSegment = (segment: InfographicSegment): FormSegment => {
 
   return {
     accent: segment.accent ?? "",
-    body: segment.body ?? "",
     durationSeconds: String(getSegmentDurationSeconds(segment)),
-    footnote: segment.footnote ?? "",
     itemsText: (segment.items ?? []).join("\n"),
     layout: segment.layout,
     metric: segment.metric ?? "",
@@ -55,9 +51,7 @@ export const toFormSegment = (segment: InfographicSegment): FormSegment => {
 
 export const newSegment = (layout: LayoutKind = "flowchart"): FormSegment => ({
   accent: "",
-  body: "",
   durationSeconds: String(LAYOUT_SPECS[layout].durationSeconds),
-  footnote: "",
   itemsText: defaultItems
     .slice(0, LAYOUT_SPECS[layout].recommendedItems)
     .join("\n"),
@@ -128,9 +122,7 @@ export const toTemplate = (
         segment.durationSeconds,
       ),
       ...(segment.subtitle.trim() ? { subtitle: segment.subtitle.trim() } : {}),
-      ...(segment.body.trim() ? { body: segment.body.trim() } : {}),
       ...(segment.metric.trim() ? { metric: segment.metric.trim() } : {}),
-      ...(segment.footnote.trim() ? { footnote: segment.footnote.trim() } : {}),
       ...(segment.accent.trim() ? { accent: segment.accent.trim() } : {}),
       ...(parseItems(segment.itemsText).length > 0
         ? { items: parseItems(segment.itemsText) }

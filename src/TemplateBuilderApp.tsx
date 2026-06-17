@@ -1,7 +1,18 @@
-import { useMemo, useState, type ChangeEvent, type FormEvent } from "react";
+import { Player } from "@remotion/player";
 import {
+  useEffect,
+  useMemo,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
+import {
+  FPS,
   LAYOUT_SPECS,
+  VIDEO_HEIGHT,
+  VIDEO_WIDTH,
   defaultTheme,
+  getTemplateDurationInFrames,
   type InfographicTemplate,
   type LayoutKind,
   type Theme,
@@ -16,13 +27,53 @@ import {
   toTemplate,
 } from "./builder/templateMapper";
 import type { FormSegment } from "./builder/types";
+import { InfographicVideo } from "./video/InfographicVideo";
+import type { TranscriptPage } from "./video/types";
 
 type TemplateBuilderAppProps = {
   initialTemplate: InfographicTemplate;
+  projectName: string;
+  previewVideoSrc?: string;
+  transcriptPages?: TranscriptPage[];
+};
+
+type RenderStatus = "idle" | "submitting" | "queued" | "error";
+
+const templateToFormSegments = (
+  template: InfographicTemplate,
+): FormSegment[] =>
+  template.segments.map((segment) => ({
+    ...toFormSegment(segment),
+    videoShown: template.videoBased === true && segment.videoShown === true,
+  }));
+
+const parseTemplateJson = (value: string): InfographicTemplate => {
+  const parsed = JSON.parse(value) as Partial<InfographicTemplate>;
+
+  if (!parsed || typeof parsed !== "object") {
+    throw new Error("JSON must be an object.");
+  }
+
+  if (typeof parsed.title !== "string") {
+    throw new Error("JSON must include a string title.");
+  }
+
+  if (!parsed.theme || typeof parsed.theme !== "object") {
+    throw new Error("JSON must include a theme object.");
+  }
+
+  if (!Array.isArray(parsed.segments) || parsed.segments.length === 0) {
+    throw new Error("JSON must include at least one segment.");
+  }
+
+  return parsed as InfographicTemplate;
 };
 
 export const TemplateBuilderApp = ({
   initialTemplate,
+  projectName,
+  previewVideoSrc,
+  transcriptPages = [],
 }: TemplateBuilderAppProps) => {
   const [title, setTitle] = useState(initialTemplate.title);
   const [hookText, setHookText] = useState(initialTemplate.hookText ?? "");
@@ -39,12 +90,16 @@ export const TemplateBuilderApp = ({
     ...initialTemplate.theme,
   });
   const [segments, setSegments] = useState<FormSegment[]>(
-    initialTemplate.segments.map((segment) => ({
-      ...toFormSegment(segment),
-      videoShown: initialTemplate.videoBased === true && segment.videoShown === true,
-    })),
+    templateToFormSegments(initialTemplate),
   );
   const [copied, setCopied] = useState(false);
+  const [jsonDraft, setJsonDraft] = useState(() =>
+    JSON.stringify(initialTemplate, null, 2),
+  );
+  const [jsonError, setJsonError] = useState<string | null>(null);
+  const [renderEmail, setRenderEmail] = useState("");
+  const [renderStatus, setRenderStatus] = useState<RenderStatus>("idle");
+  const [renderMessage, setRenderMessage] = useState("");
 
   const template = useMemo(
     () =>
@@ -61,6 +116,29 @@ export const TemplateBuilderApp = ({
     [title, hookText, intro, outro, caption, theme, videoBased, segments],
   );
   const json = useMemo(() => JSON.stringify(template, null, 2), [template]);
+  const previewDurationInFrames = useMemo(
+    () => getTemplateDurationInFrames(template, FPS),
+    [template],
+  );
+
+  useEffect(() => {
+    setJsonDraft(json);
+    setJsonError(null);
+  }, [json]);
+
+  const applyTemplate = (nextTemplate: InfographicTemplate) => {
+    setTitle(nextTemplate.title);
+    setHookText(nextTemplate.hookText ?? "");
+    setIntro(nextTemplate.intro === true);
+    setOutro(nextTemplate.outro === true);
+    setVideoBased(nextTemplate.videoBased === true);
+    setCaption(
+      nextTemplate.videoBased === true && nextTemplate.caption === true,
+    );
+    setTheme({ ...defaultTheme, ...nextTemplate.theme });
+    setSegments(templateToFormSegments(nextTemplate));
+    setCopied(false);
+  };
 
   const updateTheme = (key: keyof Theme, value: string) => {
     setTheme((current) => ({
@@ -142,7 +220,7 @@ export const TemplateBuilderApp = ({
 
   const copyJson = async () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      await navigator.clipboard.writeText(json);
+      await navigator.clipboard.writeText(jsonDraft);
       setCopied(true);
     }
   };
@@ -160,6 +238,27 @@ export const TemplateBuilderApp = ({
   const handleHookTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     setHookText(event.target.value);
     setCopied(false);
+  };
+
+  const handleJsonChange = (value: string) => {
+    setJsonDraft(value);
+    setCopied(false);
+    setRenderStatus("idle");
+    setRenderMessage("");
+
+    try {
+      const nextTemplate = parseTemplateJson(value);
+      setJsonError(null);
+      applyTemplate(nextTemplate);
+    } catch (error) {
+      setJsonError(error instanceof Error ? error.message : "Invalid JSON.");
+    }
+  };
+
+  const handleRenderEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setRenderEmail(event.target.value);
+    setRenderStatus("idle");
+    setRenderMessage("");
   };
 
   const handleIntroChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -191,6 +290,52 @@ export const TemplateBuilderApp = ({
   const handleCaptionChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCaption(event.target.checked);
     setCopied(false);
+  };
+
+  const requestRender = async () => {
+    if (jsonError) {
+      setRenderStatus("error");
+      setRenderMessage("Fix the JSON before requesting a render.");
+      return;
+    }
+
+    setRenderStatus("submitting");
+    setRenderMessage("");
+
+    try {
+      const response = await fetch("/api/render-jobs", {
+        body: JSON.stringify({
+          email: renderEmail,
+          projectName,
+          template,
+          transcriptPages,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+      const result = (await response.json()) as {
+        error?: string;
+        jobId?: string;
+        message?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(result.error ?? "Render request failed.");
+      }
+
+      setRenderStatus("queued");
+      setRenderMessage(
+        result.message ??
+          `Render queued. The Drive link will be emailed to ${renderEmail}.`,
+      );
+    } catch (error) {
+      setRenderStatus("error");
+      setRenderMessage(
+        error instanceof Error ? error.message : "Render request failed.",
+      );
+    }
   };
 
   return (
@@ -287,7 +432,66 @@ export const TemplateBuilderApp = ({
         </div>
       </section>
 
-      <JsonPanel copied={copied} json={json} onCopy={() => void copyJson()} />
+      <aside className="preview-panel">
+        <div className="preview-panel-head">
+          <h2>Preview</h2>
+          <span>{Math.round(previewDurationInFrames / FPS)}s</span>
+        </div>
+        <div className="preview-frame">
+          <Player
+            component={InfographicVideo}
+            compositionHeight={VIDEO_HEIGHT}
+            compositionWidth={VIDEO_WIDTH}
+            controls
+            durationInFrames={previewDurationInFrames}
+            fps={FPS}
+            inputProps={{
+              mediaMode: "preview",
+              template,
+              transcriptPages,
+              videoSrc: previewVideoSrc,
+            }}
+            style={{
+              height: "100%",
+              width: "100%",
+            }}
+          />
+        </div>
+
+        <div className="render-card">
+          <label className="builder-field">
+            <span>Email completion link</span>
+            <input
+              onChange={handleRenderEmailChange}
+              placeholder="name@example.com"
+              required
+              type="email"
+              value={renderEmail}
+            />
+          </label>
+          <button
+            className="builder-primary"
+            disabled={renderStatus === "submitting" || Boolean(jsonError)}
+            onClick={() => void requestRender()}
+            type="button"
+          >
+            {renderStatus === "submitting" ? "Queuing" : "Render video"}
+          </button>
+          {renderMessage ? (
+            <p className={`render-message ${renderStatus}`}>
+              {renderMessage}
+            </p>
+          ) : null}
+        </div>
+
+        <JsonPanel
+          copied={copied}
+          json={jsonDraft}
+          jsonError={jsonError}
+          onCopy={() => void copyJson()}
+          onJsonChange={handleJsonChange}
+        />
+      </aside>
     </form>
   );
 };
