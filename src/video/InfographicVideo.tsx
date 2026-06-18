@@ -19,6 +19,7 @@ import { BRAND_FONTS } from "../brand";
 import { CaptionsOverlay } from "./CaptionsOverlay";
 import { IntroHookOverlay } from "./IntroHookOverlay";
 import { SegmentScene } from "./SegmentScene";
+import { SceneHeader } from "./scene/SceneHeader";
 import type { InfographicVideoProps } from "./types";
 
 type SegmentRange = {
@@ -234,6 +235,8 @@ export const InfographicVideo = ({
       {template.intro === true ? (
         <IntroHookOverlay template={template} />
       ) : null}
+
+      <SceneHeader theme={{ ...template.theme }} />
     </AbsoluteFill>
   );
 };

@@ -63,7 +63,23 @@ video without adding duration. Captions start after the intro overlay finishes.
 When `outro` is true, the render ends with `public/outro.mp4`. `caption` can
 only be enabled when `videoBased` is true.
 
-## Web builder
+## Quick Start
+
+For a fresh clone, start by copying `.env.example` to `.env`, then fill in your
+Google values and local port.
+
+Make sure these files exist before you run anything:
+
+- `.env` created from `.env.example`
+- `src/projects/<project-name>/template.json`
+- `src/projects/<project-name>/video.mp4` for video-based projects
+- `src/projects/<project-name>/tokens.json` if you want captions
+- `src/projects/<project-name>/audio.wav` if your workflow uses the local audio
+- `src/projects/<project-name>/captions.json` if you regenerate captions locally
+
+The sample project in this repo is `src/projects/process-optimization/`.
+
+## Web Builder
 
 The builder is the user-facing app. It has a form, an editable JSON panel, a
 live Remotion Player preview, and an email field for render delivery.
@@ -77,13 +93,14 @@ truth for both the preview and the render request.
 
 Submitting a render returns immediately. The request is stored as a JSON job in
 `.render-jobs/queued`, then the worker renders the MP4, uploads it to Google
-Drive when credentials are configured, and sends the Drive link by email.
+Drive with a resumable upload when credentials are configured, and sends the
+Drive link by email.
 
 If Google credentials are not configured, completed MP4s stay in
 `.render-jobs/output` and the email body is written to
 `.render-jobs/notifications`.
 
-## Render worker
+## Render Worker
 
 The web server wakes the worker for each submitted job. You can also keep a
 worker running explicitly:
@@ -95,10 +112,12 @@ npm run worker
 The app is database-free: queued, completed, failed, output, and notification
 records are plain files under `.render-jobs`.
 
-Copy `.env.example` to `.env` for the production server environment. Drive and
-Gmail use Google OAuth credentials with `drive.file` and `gmail.send` scopes.
+Drive and Gmail use Google OAuth credentials with `drive.file` and
+`gmail.send` scopes. Put them in `.env` before you start the app. The worker
+logs render progress at 5% steps, upload progress with speed and ETA, and the
+email subject plus Drive folder and file link before sending.
 
-## Commands
+## Essential Commands
 
 **Install Dependencies**
 
@@ -131,6 +150,24 @@ npm run build:builder
 ```
 
 Then open `public/template-builder.html` in a browser.
+
+**Start the web app**
+
+```console
+npm run web
+```
+
+**Start the worker**
+
+```console
+npm run worker
+```
+
+**Test Drive upload only**
+
+```console
+node scripts/test-drive-upload.mjs
+```
 
 The render target is 1080 x 1920 at 30 fps. Segment duration is fixed by layout
 type in `src/layoutCatalog.ts`. Rendering is configured to use the installed

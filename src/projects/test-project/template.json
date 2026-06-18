@@ -1,6 +1,6 @@
 {
-  "title": "What is Process Optimization?",
-  "hookText": "Your AI is not failing, your operations are.",
+  "title": "Why This App Is Awesome",
+  "hookText": "A clean workflow can feel surprisingly good.",
   "intro": false,
   "outro": false,
   "videoBased": false,
@@ -19,16 +19,35 @@
     {
       "videoShown": false,
       "layout": "stats",
-      "title": "It Is Not the Market",
-      "durationSeconds": 4.41,
-      "subtitle": "The real issue is the mess underneath the business.",
-      "metric": "Hidden operational mess",
+      "title": "Built for Speed",
+      "durationSeconds": 3,
+      "subtitle": "This app keeps the whole render flow tight, simple, and readable.",
+      "metric": "Fast setup",
       "accent": "#606bfa",
       "items": [
-        "Weak workflows",
-        "Scattered execution",
-        "Unclear systems",
-        "Broken operations"
+        "Clean web builder",
+        "Helpful progress logs",
+        "Resumable Drive upload",
+        "Simple email delivery"
+      ]
+    },
+    {
+      "videoShown": false,
+      "layout": "comparison",
+      "title": "Everything Feels Connected",
+      "durationSeconds": 3,
+      "subtitle": "The preview, render, upload, and email steps all stay in one place.",
+      "metric": "Smooth workflow",
+      "accent": "#a0a6fc",
+      "items": [
+        "More steps",
+        "Manual work",
+        "Waiting around",
+        "Learning curve",
+        "One workflow",
+        "Automated output",
+        "Clear status",
+        "Easy to use"
       ]
     }
   ]

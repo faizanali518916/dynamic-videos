@@ -38843,22 +38843,6 @@ Check that all your Remotion packages are on the same version. If your dependenc
             }
           ),
           /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
-            Img,
-            {
-              alt: "",
-              src: staticFile("logo.png"),
-              style: {
-                height: 54,
-                objectFit: "contain",
-                position: "absolute",
-                right: 74,
-                top: 88,
-                width: "auto",
-                zIndex: 2
-              }
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
             "div",
             {
               style: {
@@ -38902,37 +38886,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
     );
   };
 
-  // src/video/scene/SceneHeader.tsx
-  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
-  var SceneHeader = ({ theme }) => /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
-    "header",
-    {
-      style: {
-        alignItems: "center",
-        display: "flex",
-        height: 92,
-        justifyContent: "flex-end",
-        position: "relative",
-        zIndex: 2
-      },
-      children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
-        Img,
-        {
-          alt: "",
-          src: staticFile("logo.png"),
-          style: {
-            height: 52,
-            objectFit: "contain",
-            width: "auto",
-            filter: theme.background === "#ffffff" ? "drop-shadow(0 10px 26px rgba(0, 0, 0, 0.18))" : void 0
-          }
-        }
-      )
-    }
-  );
-
   // src/video/primitives/GlowCard.tsx
-  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime64 = __toESM(require_jsx_runtime());
   var GlowCard = ({
     accent,
     children,
@@ -38940,7 +38895,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
     shine = 0,
     style: style2,
     theme
-  }) => /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(
+  }) => /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(
     "div",
     {
       style: {
@@ -38950,7 +38905,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
         ...style2
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
           "div",
           {
             style: {
@@ -38968,7 +38923,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
           "div",
           {
             style: {
@@ -38987,7 +38942,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   );
 
   // src/video/layouts/BarGraphLayout.tsx
-  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime65 = __toESM(require_jsx_runtime());
   var BarGraphLayout = ({
     accent,
     frame,
@@ -38997,7 +38952,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
     const items = ensureItems(segment);
     const values = ensureValues(segment, items.length);
     const maxValue = Math.max(...values, 1);
-    return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
       GlowCard,
       {
         accent,
@@ -39015,7 +38970,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
         children: items.map((item, itemIndex) => {
           const amount = reveal(frame, itemIndex);
           const height = `${Math.max(16, values[itemIndex] / maxValue * 100)}%`;
-          return /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(
+          return /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(
             "div",
             {
               style: {
@@ -39027,7 +38982,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 justifyContent: "flex-end"
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime65.jsxs)(
                   "div",
                   {
                     style: {
@@ -39045,7 +39000,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                     ]
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
                   "div",
                   {
                     style: {
@@ -39055,7 +39010,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                       overflow: "hidden",
                       position: "relative"
                     },
-                    children: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+                    children: /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
                       "div",
                       {
                         style: {
@@ -39074,7 +39029,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                     )
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
                   "div",
                   {
                     style: {
@@ -39100,14 +39055,14 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/primitives/HighlightTag.tsx
-  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime66 = __toESM(require_jsx_runtime());
   var HighlightTag = ({
     accent,
     children,
     index,
     style: style2,
     theme
-  }) => /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(
+  }) => /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(
     "div",
     {
       style: {
@@ -39126,7 +39081,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
         ...style2
       },
       children: [
-        typeof index === "number" ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
+        typeof index === "number" ? /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
           "span",
           {
             style: {
@@ -39148,7 +39103,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   );
 
   // src/video/layouts/ComparisonLayout.tsx
-  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime67 = __toESM(require_jsx_runtime());
   var ComparisonLayout = ({
     accent,
     frame,
@@ -39161,7 +39116,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       { color: theme.secondary, label: "Before", rows: items.slice(0, midpoint) },
       { color: accent, label: "After", rows: items.slice(midpoint) }
     ];
-    return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
       "div",
       {
         style: {
@@ -39170,7 +39125,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           gridTemplateColumns: "1fr 1fr",
           width: "100%"
         },
-        children: columns.map((column, columnIndex) => /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(
+        children: columns.map((column, columnIndex) => /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(
           GlowCard,
           {
             accent: column.color,
@@ -39181,8 +39136,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
               transform: `rotate(${columnIndex === 0 ? -1 : 1}deg)`
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(HighlightTag, { accent: column.color, theme, children: column.label }),
-              /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(HighlightTag, { accent: column.color, theme, children: column.label }),
+              /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
                 "div",
                 {
                   style: {
@@ -39191,7 +39146,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                     gap: 20,
                     marginTop: 30
                   },
-                  children: column.rows.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+                  children: column.rows.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
                     "div",
                     {
                       style: {
@@ -39223,13 +39178,13 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/primitives/CurvedArrow.tsx
-  var import_jsx_runtime69 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime68 = __toESM(require_jsx_runtime());
   var CurvedArrow = ({
     accent,
     direction = "right",
     opacity: opacity2 = 1,
     style: style2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(
+  }) => /* @__PURE__ */ (0, import_jsx_runtime68.jsxs)(
     "svg",
     {
       height: "112",
@@ -39243,7 +39198,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
         ...style2
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
           "path",
           {
             d: "M12 12 H86 Q126 12 126 52 V82",
@@ -39253,13 +39208,13 @@ Check that all your Remotion packages are on the same version. If your dependenc
             strokeWidth: "5"
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("path", { d: "M112 82 L126 108 L140 82 Z", fill: accent })
+        /* @__PURE__ */ (0, import_jsx_runtime68.jsx)("path", { d: "M112 82 L126 108 L140 82 Z", fill: accent })
       ]
     }
   );
 
   // src/video/layouts/FlowchartLayout.tsx
-  var import_jsx_runtime70 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime69 = __toESM(require_jsx_runtime());
   var FlowchartLayout = ({
     accent,
     frame,
@@ -39267,10 +39222,10 @@ Check that all your Remotion packages are on the same version. If your dependenc
     theme
   }) => {
     const items = ensureItems(segment);
-    return /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("div", { style: { position: "relative", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 42 }, children: items.map((item, itemIndex) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("div", { style: { position: "relative", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 42 }, children: items.map((item, itemIndex) => {
       const amount = reveal(frame, itemIndex);
       const isLeft = itemIndex % 2 === 0;
-      return /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(
+      return /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(
         "div",
         {
           style: {
@@ -39283,7 +39238,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
             ...enterStyle(amount)
           },
           children: [
-            itemIndex < items.length - 1 ? /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+            itemIndex < items.length - 1 ? /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
               CurvedArrow,
               {
                 accent,
@@ -39297,7 +39252,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 }
               }
             ) : null,
-            /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(
+            /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(
               GlowCard,
               {
                 accent,
@@ -39308,7 +39263,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   width: 646
                 },
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(
+                  /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(
                     "div",
                     {
                       style: {
@@ -39323,7 +39278,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                       ]
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
                     "div",
                     {
                       style: {
@@ -39347,13 +39302,13 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/primitives/Arrow.tsx
-  var import_jsx_runtime71 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime70 = __toESM(require_jsx_runtime());
   var Arrow = ({
     accent,
     opacity: opacity2 = 1,
     rotate: rotate2 = 0,
     style: style2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(
+  }) => /* @__PURE__ */ (0, import_jsx_runtime70.jsxs)(
     "div",
     {
       style: {
@@ -39365,7 +39320,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
         ...style2
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
           "div",
           {
             style: {
@@ -39375,7 +39330,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
             }
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
           "div",
           {
             style: {
@@ -39391,7 +39346,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   );
 
   // src/video/layouts/HierarchyLayout.tsx
-  var import_jsx_runtime72 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime71 = __toESM(require_jsx_runtime());
   var HierarchyLayout = ({
     accent,
     frame,
@@ -39404,7 +39359,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
     const managerCount = remainingItems.length <= 3 ? remainingItems.length : Math.min(3, Math.ceil(remainingItems.length / 2));
     const managers = remainingItems.slice(0, managerCount);
     const teams = remainingItems.slice(managerCount);
-    return /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(
       "div",
       {
         style: {
@@ -39415,14 +39370,14 @@ Check that all your Remotion packages are on the same version. If your dependenc
           width: "100%"
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
             GlowCard,
             {
               accent,
               shine: reveal(frame),
               theme,
               style: { padding: "30px 42px", textAlign: "center", width: 620 },
-              children: /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+              children: /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
                 "div",
                 {
                   style: {
@@ -39437,8 +39392,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
               )
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(Arrow, { accent, opacity: reveal(frame, 1), rotate: 90 }),
-          /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(Arrow, { accent, opacity: reveal(frame, 1), rotate: 90 }),
+          /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
             "div",
             {
               style: {
@@ -39447,7 +39402,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 gridTemplateColumns: `repeat(${managers.length}, 1fr)`,
                 width: "100%"
               },
-              children: managers.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+              children: managers.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
                 GlowCard,
                 {
                   accent,
@@ -39469,7 +39424,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               ))
             }
           ),
-          teams.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+          teams.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
             "div",
             {
               style: {
@@ -39478,7 +39433,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 gridTemplateColumns: `repeat(${Math.min(3, teams.length)}, 1fr)`,
                 width: "88%"
               },
-              children: teams.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(
+              children: teams.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(
                 "div",
                 {
                   style: {
@@ -39495,7 +39450,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                     ...enterStyle(reveal(frame, itemIndex + managerCount + 1), 22)
                   },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
                       "div",
                       {
                         style: {
@@ -39519,7 +39474,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/MatrixLayout.tsx
-  var import_jsx_runtime73 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime72 = __toESM(require_jsx_runtime());
   var MatrixLayout = ({
     accent,
     frame,
@@ -39528,7 +39483,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   }) => {
     const items = ensureItems(segment);
     const labels = ["Pop", "Push", "Build", "Hold"];
-    return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
       "div",
       {
         style: {
@@ -39537,7 +39492,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           gridTemplateColumns: "1fr 1fr",
           width: "100%"
         },
-        children: items.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime73.jsxs)(
+        children: items.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime72.jsxs)(
           GlowCard,
           {
             accent,
@@ -39549,8 +39504,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
               ...enterStyle(reveal(frame, itemIndex))
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(HighlightTag, { accent, index: itemIndex, theme, children: labels[itemIndex] }),
-              /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(HighlightTag, { accent, index: itemIndex, theme, children: labels[itemIndex] }),
+              /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
                 "div",
                 {
                   style: {
@@ -39566,7 +39521,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   }
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
                 "div",
                 {
                   style: {
@@ -39593,7 +39548,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/ProcessLayout.tsx
-  var import_jsx_runtime74 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime73 = __toESM(require_jsx_runtime());
   var ProcessLayout = ({
     accent,
     frame,
@@ -39601,7 +39556,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
     theme
   }) => {
     const items = ensureItems(segment);
-    return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
       "div",
       {
         style: {
@@ -39610,7 +39565,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           gap: 20,
           width: "100%"
         },
-        children: items.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(
+        children: items.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime73.jsxs)(
           GlowCard,
           {
             accent,
@@ -39627,7 +39582,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               ...enterStyle(reveal(frame, itemIndex), 26)
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
                 "div",
                 {
                   style: {
@@ -39645,7 +39600,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   children: itemIndex + 1
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
                 "div",
                 {
                   style: {
@@ -39658,7 +39613,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   children: item
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
                 Arrow,
                 {
                   accent,
@@ -39675,7 +39630,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/PyramidLayout.tsx
-  var import_jsx_runtime75 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime74 = __toESM(require_jsx_runtime());
   var PyramidLayout = ({
     accent,
     frame,
@@ -39687,7 +39642,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
     const layerHeight = 105;
     const gap = 10;
     const totalHeight = items.length * layerHeight + (items.length - 1) * gap;
-    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
       "div",
       {
         style: {
@@ -39706,7 +39661,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           const bottomWidth = baseWidth * (yBottom / totalHeight);
           const topInsetPercent = bottomWidth === 0 ? 50 : (bottomWidth - topWidth) / 2 / bottomWidth * 100;
           const isTop = itemIndex === 0;
-          return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
             "div",
             {
               style: {
@@ -39732,7 +39687,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 transformOrigin: "center center",
                 ...headingTextStyle
               },
-              children: /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+              children: /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
                 "div",
                 {
                   style: {
@@ -39751,7 +39706,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/QuadrantLayout.tsx
-  var import_jsx_runtime76 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime75 = __toESM(require_jsx_runtime());
   var QuadrantLayout = ({
     accent,
     frame,
@@ -39760,8 +39715,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
   }) => {
     const items = ensureItems(segment);
     const labels = ["Spark", "Launch", "Tune", "Pause"];
-    return /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)("div", { style: { height: 760, position: "relative", width: "100%" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)("div", { style: { height: 760, position: "relative", width: "100%" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
         "div",
         {
           style: {
@@ -39775,7 +39730,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           }
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
         "div",
         {
           style: {
@@ -39789,7 +39744,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           }
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
         "div",
         {
           style: {
@@ -39804,7 +39759,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           children: "Value"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
         "div",
         {
           style: {
@@ -39819,7 +39774,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           children: "Effort"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
         "div",
         {
           style: {
@@ -39830,7 +39785,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
             position: "relative",
             zIndex: 1
           },
-          children: items.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(
+          children: items.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(
             GlowCard,
             {
               accent,
@@ -39844,8 +39799,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 ...enterStyle(reveal(frame, itemIndex), 24)
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(HighlightTag, { accent, index: itemIndex, theme, children: labels[itemIndex] }),
-                /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(HighlightTag, { accent, index: itemIndex, theme, children: labels[itemIndex] }),
+                /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
                   "div",
                   {
                     style: {
@@ -39867,7 +39822,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/RadialLayout.tsx
-  var import_jsx_runtime77 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime76 = __toESM(require_jsx_runtime());
   var RadialLayout = ({
     accent,
     frame,
@@ -39877,7 +39832,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
     const items = ensureItems(segment);
     const radius = 326;
     const orbit = frame / 240 * Math.PI * 2;
-    return /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime76.jsxs)(
       "div",
       {
         style: {
@@ -39887,7 +39842,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           width: 900
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
             "div",
             {
               style: {
@@ -39903,7 +39858,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               }
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
             GlowCard,
             {
               accent,
@@ -39923,7 +39878,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 width: 290,
                 zIndex: 3
               },
-              children: /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
+              children: /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
                 "div",
                 {
                   style: {
@@ -39950,7 +39905,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
             const amount = reveal(frame, itemIndex);
-            return /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
+            return /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
               GlowCard,
               {
                 accent,
@@ -39978,7 +39933,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   zIndex: 2,
                   ...headingTextStyle
                 },
-                children: /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
+                children: /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
                   "div",
                   {
                     style: {
@@ -40003,7 +39958,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/RoadmapLayout.tsx
-  var import_jsx_runtime78 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime77 = __toESM(require_jsx_runtime());
   var RoadmapLayout = ({
     accent,
     frame,
@@ -40011,8 +39966,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
     theme
   }) => {
     const items = ensureItems(segment);
-    return /* @__PURE__ */ (0, import_jsx_runtime78.jsxs)("div", { style: { position: "relative", width: "100%" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)("div", { style: { position: "relative", width: "100%" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
         "div",
         {
           style: {
@@ -40029,10 +39984,10 @@ Check that all your Remotion packages are on the same version. If your dependenc
           }
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime78.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 25 }, children: items.map((item, itemIndex) => {
+      /* @__PURE__ */ (0, import_jsx_runtime77.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 25 }, children: items.map((item, itemIndex) => {
         const isLeft = itemIndex % 2 === 0;
         const amount = reveal(frame, itemIndex);
-        return /* @__PURE__ */ (0, import_jsx_runtime78.jsxs)(
+        return /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(
           "div",
           {
             style: {
@@ -40043,7 +39998,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               ...enterStyle(amount, 30)
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
                 Arrow,
                 {
                   accent,
@@ -40056,7 +40011,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   }
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime78.jsxs)(
+              /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(
                 GlowCard,
                 {
                   accent,
@@ -40064,7 +40019,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   theme,
                   style: { padding: 25, width: 410 },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime78.jsxs)(
+                    /* @__PURE__ */ (0, import_jsx_runtime77.jsxs)(
                       "div",
                       {
                         style: {
@@ -40080,7 +40035,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                         ]
                       }
                     ),
-                    /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
                       "div",
                       {
                         style: {
@@ -40105,11 +40060,11 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/StatsLayout.tsx
-  var import_jsx_runtime79 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime78 = __toESM(require_jsx_runtime());
   var StatsLayout = ({ accent, frame, segment, theme }) => {
     const items = ensureItems(segment);
     const values = ensureValues(segment, items.length);
-    return /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime78.jsxs)(
       "div",
       {
         style: {
@@ -40119,7 +40074,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           width: "100%"
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime78.jsxs)(
             GlowCard,
             {
               accent,
@@ -40127,7 +40082,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               theme,
               style: { padding: 32 },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
                   "div",
                   {
                     style: {
@@ -40140,7 +40095,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                     children: segment.metric ?? `${values[0]}%`
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
                   "div",
                   {
                     style: {
@@ -40153,7 +40108,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                       position: "absolute",
                       right: 44
                     },
-                    children: /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
+                    children: /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
                       "div",
                       {
                         style: {
@@ -40170,7 +40125,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime79.jsx)("div", { style: { display: "grid", gap: 18, gridTemplateColumns: "1fr 1fr" }, children: items.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime78.jsx)("div", { style: { display: "grid", gap: 18, gridTemplateColumns: "1fr 1fr" }, children: items.map((item, itemIndex) => /* @__PURE__ */ (0, import_jsx_runtime78.jsxs)(
             GlowCard,
             {
               accent,
@@ -40181,7 +40136,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 ...enterStyle(reveal(frame, itemIndex + 2), 24)
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)(
+                /* @__PURE__ */ (0, import_jsx_runtime78.jsxs)(
                   "div",
                   {
                     style: {
@@ -40196,7 +40151,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                     ]
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
                   "div",
                   {
                     style: {
@@ -40220,7 +40175,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/TimelineLayout.tsx
-  var import_jsx_runtime80 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime79 = __toESM(require_jsx_runtime());
   var TimelineLayout = ({
     accent,
     frame,
@@ -40228,8 +40183,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
     theme
   }) => {
     const items = ensureItems(segment);
-    return /* @__PURE__ */ (0, import_jsx_runtime80.jsxs)("div", { style: { position: "relative", width: "100%" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)("div", { style: { position: "relative", width: "100%" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
         "div",
         {
           style: {
@@ -40243,9 +40198,9 @@ Check that all your Remotion packages are on the same version. If your dependenc
           }
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime80.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 27 }, children: items.map((item, itemIndex) => {
+      /* @__PURE__ */ (0, import_jsx_runtime79.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 27 }, children: items.map((item, itemIndex) => {
         const amount = reveal(frame, itemIndex);
-        return /* @__PURE__ */ (0, import_jsx_runtime80.jsxs)(
+        return /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)(
           "div",
           {
             style: {
@@ -40256,7 +40211,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               ...enterStyle(amount)
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
                 "div",
                 {
                   style: {
@@ -40277,7 +40232,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   children: String(itemIndex + 1).padStart(2, "0")
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime80.jsxs)(
+              /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)(
                 GlowCard,
                 {
                   accent,
@@ -40285,7 +40240,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                   theme,
                   style: { padding: 28 },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
                       Arrow,
                       {
                         accent,
@@ -40293,7 +40248,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                         style: { position: "absolute", right: 24, top: 26 }
                       }
                     ),
-                    /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
                       "div",
                       {
                         style: {
@@ -40306,11 +40261,11 @@ Check that all your Remotion packages are on the same version. If your dependenc
                         children: item
                       }
                     ),
-                    /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
                       "div",
                       {
                         style: { color: theme.muted, fontSize: 22, marginTop: 10 },
-                        children: /* @__PURE__ */ (0, import_jsx_runtime80.jsxs)("span", { style: { fontFamily: subheadingTextStyle.fontFamily }, children: [
+                        children: /* @__PURE__ */ (0, import_jsx_runtime79.jsxs)("span", { style: { fontFamily: subheadingTextStyle.fontFamily }, children: [
                           "Milestone ",
                           itemIndex + 1
                         ] })
@@ -40328,40 +40283,40 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
 
   // src/video/layouts/renderLayout.tsx
-  var import_jsx_runtime81 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime80 = __toESM(require_jsx_runtime());
   var renderLayout = (props) => {
     switch (props.segment.layout) {
       case "flowchart":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(FlowchartLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(FlowchartLayout, { ...props });
       case "barGraph":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(BarGraphLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(BarGraphLayout, { ...props });
       case "timeline":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(TimelineLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(TimelineLayout, { ...props });
       case "comparison":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(ComparisonLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(ComparisonLayout, { ...props });
       case "radial":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(RadialLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(RadialLayout, { ...props });
       case "matrix":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(MatrixLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(MatrixLayout, { ...props });
       case "stats":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(StatsLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(StatsLayout, { ...props });
       case "process":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(ProcessLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(ProcessLayout, { ...props });
       case "pyramid":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(PyramidLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(PyramidLayout, { ...props });
       case "roadmap":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(RoadmapLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(RoadmapLayout, { ...props });
       case "hierarchy":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(HierarchyLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(HierarchyLayout, { ...props });
       case "quadrant":
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(QuadrantLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(QuadrantLayout, { ...props });
       default:
-        return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(FlowchartLayout, { ...props });
+        return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(FlowchartLayout, { ...props });
     }
   };
 
   // src/video/SegmentScene.tsx
-  var import_jsx_runtime82 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime81 = __toESM(require_jsx_runtime());
   var SegmentScene = ({
     durationInFrames,
     index,
@@ -40390,7 +40345,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
         extrapolateRight: "clamp"
       }
     );
-    return /* @__PURE__ */ (0, import_jsx_runtime82.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime81.jsxs)(
       AbsoluteFill,
       {
         style: {
@@ -40401,7 +40356,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
           padding: "82px 74px 70px"
         },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
             SceneBackdrop,
             {
               accent,
@@ -40410,8 +40365,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               theme
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(SceneHeader, { theme }),
-          /* @__PURE__ */ (0, import_jsx_runtime82.jsxs)(
+          /* @__PURE__ */ (0, import_jsx_runtime81.jsxs)(
             "section",
             {
               style: {
@@ -40421,7 +40375,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                 ...enterStyle(reveal(frame), 18)
               },
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
                   "h1",
                   {
                     style: {
@@ -40435,7 +40389,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
                     children: segment.title
                   }
                 ),
-                segment.subtitle ? /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
+                segment.subtitle ? /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
                   "p",
                   {
                     style: {
@@ -40452,7 +40406,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
               ]
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
             "main",
             {
               style: {
@@ -40482,6 +40436,40 @@ Check that all your Remotion packages are on the same version. If your dependenc
       }
     );
   };
+
+  // src/video/scene/SceneHeader.tsx
+  var import_jsx_runtime82 = __toESM(require_jsx_runtime());
+  var SceneHeader = ({ theme }) => /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
+    "header",
+    {
+      style: {
+        alignItems: "center",
+        height: 92,
+        display: "flex",
+        justifyContent: "flex-end",
+        left: 0,
+        pointerEvents: "none",
+        position: "absolute",
+        right: 0,
+        top: 0,
+        zIndex: 20,
+        padding: "0 74px"
+      },
+      children: /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
+        Img,
+        {
+          alt: "",
+          src: staticFile("logo.png"),
+          style: {
+            height: 52,
+            objectFit: "contain",
+            width: "auto",
+            filter: theme.background === "#ffffff" ? "drop-shadow(0 10px 26px rgba(0, 0, 0, 0.18))" : void 0
+          }
+        }
+      )
+    }
+  );
 
   // src/video/InfographicVideo.tsx
   var import_jsx_runtime83 = __toESM(require_jsx_runtime());
@@ -40650,7 +40638,8 @@ Check that all your Remotion packages are on the same version. If your dependenc
             }
           ) : null,
           showCaptions ? /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(CaptionsOverlay, { transcriptPages }) : null,
-          template.intro === true ? /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(IntroHookOverlay, { template }) : null
+          template.intro === true ? /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(IntroHookOverlay, { template }) : null,
+          /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(SceneHeader, { theme: { ...template.theme } })
         ]
       }
     );

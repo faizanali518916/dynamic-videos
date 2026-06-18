@@ -10,7 +10,6 @@ import {
   defaultTheme,
 } from "../layoutCatalog";
 import { SceneBackdrop } from "./scene/SceneBackdrop";
-import { SceneHeader } from "./scene/SceneHeader";
 import { renderLayout } from "./layouts/renderLayout";
 import type { SegmentSceneProps } from "./types";
 import {
@@ -65,7 +64,6 @@ export const SegmentScene = ({
         progress={intro}
         theme={theme}
       />
-      <SceneHeader theme={theme} />
       <section
         style={{
           marginTop: 66,

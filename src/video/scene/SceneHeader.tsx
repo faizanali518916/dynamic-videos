@@ -8,12 +8,17 @@ type SceneHeaderProps = {
 export const SceneHeader = ({ theme }: SceneHeaderProps) => (
   <header
     style={{
-      alignItems: "center",
-      display: "flex",
+      top: 64,
+      left: 0,
+      right: 0,
       height: 92,
+      zIndex: 20,
+      display: "flex",
+      padding: "0 64px",
+      position: "absolute",
+      alignItems: "center",
+      pointerEvents: "none",
       justifyContent: "flex-end",
-      position: "relative",
-      zIndex: 2,
     }}
   >
     <Img

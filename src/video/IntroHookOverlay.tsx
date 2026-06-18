@@ -1,9 +1,7 @@
 import {
   AbsoluteFill,
-  Img,
   interpolate,
   spring,
-  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
@@ -88,19 +86,6 @@ export const IntroHookOverlay = ({ template }: IntroHookOverlayProps) => {
         frame={frame}
         progress={enterProgress}
         theme={theme}
-      />
-      <Img
-        alt=""
-        src={staticFile("logo.png")}
-        style={{
-          height: 54,
-          objectFit: "contain",
-          position: "absolute",
-          right: 74,
-          top: 88,
-          width: "auto",
-          zIndex: 2,
-        }}
       />
       <div
         style={{
