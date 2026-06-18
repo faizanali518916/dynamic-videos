@@ -12,3 +12,6 @@ out
 # Ignore large audio and video files
 audio.wav
 video.mp4
+
+# Dangerous files that should not be committed
+generate-token.mjs

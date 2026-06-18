@@ -38081,6 +38081,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
   };
   var LAYOUT_SPECS = {
     flowchart: {
+      label: "Flowchart",
       durationSeconds: 5,
       minDurationSeconds: 3,
       maxDurationSeconds: 12,
@@ -38089,6 +38090,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 5
     },
     barGraph: {
+      label: "Bar graph",
       durationSeconds: 6,
       minDurationSeconds: 3,
       maxDurationSeconds: 12,
@@ -38097,6 +38099,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 5
     },
     timeline: {
+      label: "Timeline",
       durationSeconds: 6,
       minDurationSeconds: 3,
       maxDurationSeconds: 12,
@@ -38105,6 +38108,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 5
     },
     comparison: {
+      label: "Comparison",
       durationSeconds: 5,
       minDurationSeconds: 3,
       maxDurationSeconds: 12,
@@ -38113,6 +38117,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 6
     },
     radial: {
+      label: "Radial map",
       durationSeconds: 6,
       minDurationSeconds: 3,
       maxDurationSeconds: 14,
@@ -38121,6 +38126,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 6
     },
     matrix: {
+      label: "Matrix",
       durationSeconds: 5,
       minDurationSeconds: 3,
       maxDurationSeconds: 10,
@@ -38129,6 +38135,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 4
     },
     stats: {
+      label: "Stats stack",
       durationSeconds: 5,
       minDurationSeconds: 3,
       maxDurationSeconds: 12,
@@ -38137,6 +38144,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 4
     },
     process: {
+      label: "Process",
       durationSeconds: 6,
       minDurationSeconds: 3,
       maxDurationSeconds: 14,
@@ -38145,6 +38153,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 5
     },
     pyramid: {
+      label: "Pyramid",
       durationSeconds: 5,
       minDurationSeconds: 3,
       maxDurationSeconds: 12,
@@ -38153,6 +38162,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 5
     },
     roadmap: {
+      label: "Roadmap",
       durationSeconds: 6,
       minDurationSeconds: 3,
       maxDurationSeconds: 14,
@@ -38161,6 +38171,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 5
     },
     hierarchy: {
+      label: "Hierarchy",
       durationSeconds: 6,
       minDurationSeconds: 3,
       maxDurationSeconds: 14,
@@ -38169,6 +38180,7 @@ Check that all your Remotion packages are on the same version. If your dependenc
       recommendedItems: 7
     },
     quadrant: {
+      label: "Quadrant",
       durationSeconds: 5,
       minDurationSeconds: 3,
       maxDurationSeconds: 10,
@@ -40715,6 +40727,10 @@ Check that all your Remotion packages are on the same version. If your dependenc
       () => getTemplateDurationInFrames(template, FPS),
       [template]
     );
+    const previewDurationSeconds = (0, import_react115.useMemo)(
+      () => Math.round(previewDurationInFrames / FPS),
+      [previewDurationInFrames]
+    );
     (0, import_react115.useEffect)(() => {
       setJsonDraft(json);
       setJsonError(null);
@@ -40989,11 +41005,21 @@ Check that all your Remotion packages are on the same version. If your dependenc
         )) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("aside", { className: "preview-panel", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("div", { className: "preview-panel-head", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("h2", { children: "Preview" }),
-          /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("span", { children: [
-            Math.round(previewDurationInFrames / FPS),
-            "s"
+        /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("div", { className: "preview-metrics", "aria-label": "Preview metrics", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("div", { className: "preview-metric", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("span", { children: "FPS" }),
+            /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("strong", { children: FPS })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("div", { className: "preview-metric", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("span", { children: "frames" }),
+            /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("strong", { children: previewDurationInFrames.toLocaleString() })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("div", { className: "preview-metric", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("span", { children: "duration" }),
+            /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("strong", { children: [
+              previewDurationSeconds,
+              "s"
+            ] })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("div", { className: "preview-frame", children: /* @__PURE__ */ (0, import_jsx_runtime84.jsx)(

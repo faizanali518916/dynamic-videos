@@ -1,10 +1,11 @@
 import { bundle } from "@remotion/bundler";
 import { getCompositions, renderMedia } from "@remotion/renderer";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, rm, stat } from "node:fs/promises";
+import { mkdir, rm, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { loadEnv } from "./load-env.mjs";
+import { getGoogleAccessToken, uploadToDrive } from "./drive-upload.mjs";
 import {
   ensureJobDirs,
   jobDirs,
@@ -36,119 +37,20 @@ const getBrowserExecutable = () => {
     : undefined;
 };
 
-const getProjectVideoSrc = (projectName) => {
-  const videoPath = resolve(
-    repoRoot,
-    "src",
-    "projects",
-    projectName,
-    "video.mp4",
+const getDriveConfigured = () =>
+  Boolean(
+    process.env.GOOGLE_ACCESS_TOKEN ||
+      (process.env.GOOGLE_CLIENT_ID &&
+        process.env.GOOGLE_CLIENT_SECRET &&
+        process.env.GOOGLE_REFRESH_TOKEN),
   );
 
-  return existsSync(videoPath) ? pathToFileURL(videoPath).href : undefined;
-};
-
-const getGoogleAccessToken = async () => {
-  if (process.env.GOOGLE_ACCESS_TOKEN) {
-    return process.env.GOOGLE_ACCESS_TOKEN;
-  }
-
-  const clientId = process.env.GOOGLE_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-
-  if (!clientId || !clientSecret || !refreshToken) {
+const getDriveFolderLink = () => {
+  if (!process.env.GOOGLE_DRIVE_FOLDER_ID) {
     return null;
   }
 
-  const response = await fetch("https://oauth2.googleapis.com/token", {
-    body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      grant_type: "refresh_token",
-      refresh_token: refreshToken,
-    }),
-    method: "POST",
-  });
-
-  if (!response.ok) {
-    throw new Error(`Google token refresh failed: ${await response.text()}`);
-  }
-
-  const data = await response.json();
-  return data.access_token;
-};
-
-const uploadToDrive = async ({ fileName, outputLocation }) => {
-  const accessToken = await getGoogleAccessToken();
-
-  if (!accessToken) {
-    console.log("Google Drive credentials not configured; keeping render locally.");
-    return {
-      driveConfigured: false,
-      driveLink: outputLocation,
-      driveName: fileName,
-      fileId: null,
-    };
-  }
-
-  console.log(`Uploading ${fileName} to Google Drive...`);
-  const boundary = `render-job-${Date.now()}`;
-  const metadata = {
-    mimeType: "video/mp4",
-    name: fileName,
-    ...(process.env.GOOGLE_DRIVE_FOLDER_ID
-      ? { parents: [process.env.GOOGLE_DRIVE_FOLDER_ID] }
-      : {}),
-  };
-  const videoBytes = await readFile(outputLocation);
-  const body = Buffer.concat([
-    Buffer.from(
-      `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(
-        metadata,
-      )}\r\n--${boundary}\r\nContent-Type: video/mp4\r\n\r\n`,
-    ),
-    videoBytes,
-    Buffer.from(`\r\n--${boundary}--`),
-  ]);
-  const response = await fetch(
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,size,webViewLink,webContentLink",
-    {
-      body,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": `multipart/related; boundary=${boundary}`,
-      },
-      method: "POST",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`Drive upload failed: ${await response.text()}`);
-  }
-
-  const file = await response.json();
-
-  if (process.env.GOOGLE_DRIVE_SHARE_ANYONE === "true") {
-    await fetch(
-      `https://www.googleapis.com/drive/v3/files/${file.id}/permissions`,
-      {
-        body: JSON.stringify({ role: "reader", type: "anyone" }),
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      },
-    );
-  }
-
-  return {
-    driveConfigured: true,
-    driveLink: file.webViewLink ?? file.webContentLink,
-    driveName: file.name,
-    fileId: file.id,
-  };
+  return `https://drive.google.com/drive/folders/${process.env.GOOGLE_DRIVE_FOLDER_ID}`;
 };
 
 const toBase64Url = (value) =>
@@ -159,7 +61,10 @@ const toBase64Url = (value) =>
     .replace(/=+$/g, "");
 
 const sendCompletionEmail = async ({ email, metadata }) => {
-  const accessToken = await getGoogleAccessToken();
+  const accessToken = await getGoogleAccessToken({
+    allowUnauthenticated: true,
+  });
+  const driveFolderLink = getDriveFolderLink();
   const messageLines = [
     process.env.GMAIL_FROM ? `From: ${process.env.GMAIL_FROM}` : null,
     `To: ${email}`,
@@ -168,27 +73,42 @@ const sendCompletionEmail = async ({ email, metadata }) => {
     "",
     "Your render is complete.",
     "",
+    driveFolderLink ? `Folder: ${driveFolderLink}` : null,
     `Drive link: ${metadata.driveLink}`,
     `File name: ${metadata.fileName}`,
     `File size: ${metadata.fileSizeBytes} bytes`,
     `Duration: ${metadata.durationSeconds}s`,
     `Job ID: ${metadata.id}`,
-  ].filter(Boolean);
+  ].filter((line) => line !== null);
+  const messageBody = messageLines.join("\r\n");
+  const emailSubject = `Your video render is ready: ${metadata.fileName}`;
+
+  console.log(`Preparing email for ${email}...`);
+  console.log(`Email subject: ${emailSubject}`);
+  console.log(`Drive folder: ${driveFolderLink ?? "(not set)"}`);
+  console.log(`Drive link: ${metadata.driveLink}`);
+  console.log(
+    `Email body: ${messageLines.length} lines, ${messageBody.length} characters`,
+  );
+  console.log(
+    `Email preview: ${messageLines.slice(5, 10).join(" | ") || "(no body preview)"}`,
+  );
 
   if (!accessToken || !process.env.GMAIL_FROM) {
-    console.log("Gmail credentials not configured; writing email body locally.");
+    console.log("Gmail not configured; writing notification locally instead.");
     await writeJobMetadata(jobDirs.notifications, metadata.id, {
       email,
-      message: messageLines.join("\n"),
+      message: messageBody,
       writtenAt: new Date().toISOString(),
     });
     return { emailConfigured: false };
   }
 
+  console.log(`Sending Gmail message to ${email}...`);
   const response = await fetch(
     "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
     {
-      body: JSON.stringify({ raw: toBase64Url(messageLines.join("\r\n")) }),
+      body: JSON.stringify({ raw: toBase64Url(messageBody) }),
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
@@ -201,13 +121,13 @@ const sendCompletionEmail = async ({ email, metadata }) => {
     throw new Error(`Gmail send failed: ${await response.text()}`);
   }
 
+  console.log(`Email sent to ${email}.`);
   return { emailConfigured: true };
 };
 
 const renderJob = async (job) => {
   const fileName = `${job.projectName}-${job.id}.mp4`;
   const outputLocation = resolve(jobDirs.output, fileName);
-  console.log(`Bundling Remotion project for job ${job.id}...`);
   const serveUrl = await bundle({
     entryPoint: resolve(repoRoot, "src", "index.ts"),
     onProgress: () => undefined,
@@ -217,9 +137,7 @@ const renderJob = async (job) => {
     mediaMode: "render",
     template: job.template,
     transcriptPages: job.transcriptPages,
-    videoSrc: getProjectVideoSrc(job.projectName),
   };
-  console.log(`Loading composition for job ${job.id}...`);
   const compositions = await getCompositions(serveUrl, { inputProps });
   const composition = compositions.find(({ id }) => id === job.projectName);
 
@@ -227,29 +145,26 @@ const renderJob = async (job) => {
     throw new Error(`Composition "${job.projectName}" was not found.`);
   }
 
-  console.log(`Rendering ${fileName}...`);
-  let lastProgress = -1;
+  console.log(`Rendering job ${job.id}...`);
+  let lastLoggedPercent = 0;
   await renderMedia({
     browserExecutable: getBrowserExecutable(),
     codec: "h264",
     composition,
     concurrency: 1,
     disallowParallelEncoding: true,
-    dumpBrowserLogs: true,
+    dumpBrowserLogs: false,
     hardwareAcceleration: "disable",
     inputProps,
-    logLevel: "verbose",
-    onBrowserLog: (log) => {
-      console.log(`[browser:${log.type}] ${log.text}`);
-    },
+    logLevel: "error",
     outputLocation,
     overwrite: true,
     onProgress: ({ progress }) => {
-      const percent = Math.floor(progress * 100);
+      const nextPercent = Math.floor(progress * 100);
 
-      if (percent >= lastProgress + 10 || percent === 100) {
-        lastProgress = percent;
-        console.log(`Render progress ${job.id}: ${percent}%`);
+      if (nextPercent === 100 || nextPercent >= lastLoggedPercent + 5) {
+        lastLoggedPercent = nextPercent;
+        console.log(`${nextPercent}% done`);
       }
     },
     serveUrl,
@@ -257,7 +172,24 @@ const renderJob = async (job) => {
 
   const fileStats = await stat(outputLocation);
   const durationSeconds = Math.round(composition.durationInFrames / fps);
-  const driveResult = await uploadToDrive({ fileName, outputLocation });
+  console.log(`Uploading ${fileName}...`);
+  let lastUploadPercent = 0;
+  const driveResult = await uploadToDrive(outputLocation, {
+    allowUnauthenticated: true,
+    onProgress: ({ etaSeconds, percent, size, speedMbps, uploaded }) => {
+      const nextPercent = Math.floor(percent);
+
+      if (nextPercent === 100 || nextPercent >= lastUploadPercent + 5) {
+        lastUploadPercent = nextPercent;
+        console.log(
+          `Uploading ${percent.toFixed(2)}% | ${speedMbps} Mbps | ETA: ${etaSeconds ?? "?"}s | ${uploaded.toLocaleString()} / ${size.toLocaleString()} bytes`,
+        );
+      }
+    },
+  });
+  if (!driveResult.driveConfigured && !getDriveConfigured()) {
+    console.log("Google Drive not configured; keeping local output.");
+  }
   const metadata = {
     completedAt: new Date().toISOString(),
     driveConfigured: driveResult.driveConfigured,

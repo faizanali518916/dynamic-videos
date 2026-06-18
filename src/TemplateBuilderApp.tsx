@@ -39,9 +39,7 @@ type TemplateBuilderAppProps = {
 
 type RenderStatus = "idle" | "submitting" | "queued" | "error";
 
-const templateToFormSegments = (
-  template: InfographicTemplate,
-): FormSegment[] =>
+const templateToFormSegments = (template: InfographicTemplate): FormSegment[] =>
   template.segments.map((segment) => ({
     ...toFormSegment(segment),
     videoShown: template.videoBased === true && segment.videoShown === true,
@@ -119,6 +117,10 @@ export const TemplateBuilderApp = ({
   const previewDurationInFrames = useMemo(
     () => getTemplateDurationInFrames(template, FPS),
     [template],
+  );
+  const previewDurationSeconds = useMemo(
+    () => Math.round(previewDurationInFrames / FPS),
+    [previewDurationInFrames],
   );
 
   useEffect(() => {
@@ -433,9 +435,19 @@ export const TemplateBuilderApp = ({
       </section>
 
       <aside className="preview-panel">
-        <div className="preview-panel-head">
-          <h2>Preview</h2>
-          <span>{Math.round(previewDurationInFrames / FPS)}s</span>
+        <div className="preview-metrics" aria-label="Preview metrics">
+          <div className="preview-metric">
+            <span>FPS</span>
+            <strong>{FPS}</strong>
+          </div>
+          <div className="preview-metric">
+            <span>frames</span>
+            <strong>{previewDurationInFrames.toLocaleString()}</strong>
+          </div>
+          <div className="preview-metric">
+            <span>duration</span>
+            <strong>{previewDurationSeconds}s</strong>
+          </div>
         </div>
         <div className="preview-frame">
           <Player
@@ -478,9 +490,7 @@ export const TemplateBuilderApp = ({
             {renderStatus === "submitting" ? "Queuing" : "Render video"}
           </button>
           {renderMessage ? (
-            <p className={`render-message ${renderStatus}`}>
-              {renderMessage}
-            </p>
+            <p className={`render-message ${renderStatus}`}>{renderMessage}</p>
           ) : null}
         </div>
 
