@@ -15,3 +15,9 @@ video.mp4
 
 # Dangerous files that should not be committed
 generate-token.mjs
+
+# build files
+public/template-builder.js
+public/template-builder.js.map
+public/template-builder.css
+public/template-builder.css.map
